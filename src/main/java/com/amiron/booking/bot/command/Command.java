@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public abstract class Command<T extends BotApiObject> {
 
-    public abstract BotApiMethod execute(@NotNull final T payload);
+    public abstract BotApiMethod<?> execute(@NotNull final T payload);
 
     public abstract BotCommand getCommand();
 }

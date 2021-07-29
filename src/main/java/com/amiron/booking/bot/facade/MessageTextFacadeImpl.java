@@ -23,7 +23,7 @@ public class MessageTextFacadeImpl implements MessageTextFacade {
 
     private final MessageTextGenericValidator messageTextGenericValidator;
     private final BotCommandResolver botCommandResolver;
-    private final CommandResolver commandResolver;
+    private final CommandResolver<Message> commandResolver;
 
     @Override
     public BotApiMethod<?> onReceive(@NotNull final Message message) {
@@ -31,7 +31,7 @@ public class MessageTextFacadeImpl implements MessageTextFacade {
 
         final String messageText = message.getText();
         final BotCommand botCommand = botCommandResolver.resolveByMessageText(messageText);
-        final Command command = commandResolver.resolve(botCommand);
+        final Command<Message> command = commandResolver.resolve(botCommand);
 
         return command.execute(message);
     }

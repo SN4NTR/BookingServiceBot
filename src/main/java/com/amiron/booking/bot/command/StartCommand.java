@@ -27,7 +27,7 @@ public class StartCommand extends Command<Message> {
     private final UserFacade userFacade;
 
     @Override
-    public BotApiMethod execute(@NotNull final Message message) {
+    public BotApiMethod<?> execute(@NotNull final Message message) {
         final Long chatId = message.getChatId();
         final User user = UserConverter.fromTelegramUser(chatId, message.getFrom());
 

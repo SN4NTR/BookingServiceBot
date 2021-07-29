@@ -30,7 +30,7 @@ public class SetPhoneNumberCommand extends Command<Contact> {
     private final UserFacade userFacade;
 
     @Override
-    public BotApiMethod execute(@NotNull final Contact contact) {
+    public BotApiMethod<?> execute(@NotNull final Contact contact) {
         final Long userId = contact.getUserId();
         final String phoneNumber = contact.getPhoneNumber();
 

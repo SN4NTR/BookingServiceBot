@@ -18,7 +18,7 @@ import static com.amiron.booking.bot.model.BotCommand.BOOK_NAILS;
 public class BookNailsCommand extends Command<CallbackQuery> {
 
     @Override
-    public BotApiMethod execute(@NotNull final CallbackQuery message) {
+    public BotApiMethod<?> execute(@NotNull final CallbackQuery message) {
         // TODO logic for calendar
         return null;
     }

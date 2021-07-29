@@ -23,7 +23,7 @@ public class CallbackQueryFacadeImpl implements CallbackQueryFacade {
 
     private final CallbackQueryGenericValidator callbackQueryGenericValidator;
     private final BotCommandResolver botCommandResolver;
-    private final CommandResolver commandResolver;
+    private final CommandResolver<CallbackQuery> commandResolver;
 
     @Override
     public BotApiMethod<?> onReceive(@NotNull final CallbackQuery callbackQuery) {
@@ -31,7 +31,7 @@ public class CallbackQueryFacadeImpl implements CallbackQueryFacade {
 
         final String data = callbackQuery.getData();
         final BotCommand botCommand = botCommandResolver.resolveByCommandText(data);
-        final Command command = commandResolver.resolve(botCommand);
+        final Command<CallbackQuery> command = commandResolver.resolve(botCommand);
 
         return command.execute(callbackQuery);
     }

@@ -30,7 +30,7 @@ public class SetEmailCommand extends Command<Message> {
     private final UserFacade userFacade;
 
     @Override
-    public BotApiMethod execute(@NotNull final Message message) {
+    public BotApiMethod<?> execute(@NotNull final Message message) {
         final Long userId = message.getFrom().getId();
         final String email = message.getText();
 
