@@ -10,5 +10,5 @@ import javax.validation.constraints.NotNull;
  */
 public interface ContactFacade {
 
-    BotApiMethod<?> onReceive(@NotNull final Long chatId, @NotNull final Contact contact);
+    BotApiMethod<?> onReceive(@NotNull final Contact contact);
 }

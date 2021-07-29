@@ -59,9 +59,8 @@ public class BotFacadeImpl implements BotFacade {
     }
 
     private BotApiMethod<?> processContact(final Message contactMessage) {
-        final Long chatId = contactMessage.getChatId();
         final Contact contact = contactMessage.getContact();
-        return contactFacade.onReceive(chatId, contact);
+        return contactFacade.onReceive(contact);
     }
 
     private BotApiMethod<?> processRestart(final Message message) {

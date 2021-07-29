@@ -25,7 +25,7 @@ public class ContactFacadeImpl implements ContactFacade {
     private final CommandResolver<Contact> commandResolver;
 
     @Override
-    public BotApiMethod<?> onReceive(@NotNull final Long chatId, @NotNull final Contact contact) {
+    public BotApiMethod<?> onReceive(@NotNull final Contact contact) {
         contactGenericValidator.validate(contact);
 
         final Command<Contact> command = commandResolver.resolve(SET_PHONE_NUMBER);
