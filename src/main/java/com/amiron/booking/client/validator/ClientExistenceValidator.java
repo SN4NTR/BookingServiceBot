@@ -1,7 +1,7 @@
-package com.amiron.booking.user.validator;
+package com.amiron.booking.client.validator;
 
-import com.amiron.booking.user.exception.UserAlreadyExistsException;
-import com.amiron.booking.user.service.UserService;
+import com.amiron.booking.client.exception.ClientAlreadyExistsException;
+import com.amiron.booking.client.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -14,17 +14,17 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Validated
 @Component
-public class UserExistenceValidator {
+public class ClientExistenceValidator {
 
-    private final UserService userService;
+    private final ClientService clientService;
 
     public void validate(@NotNull final Long id) {
         throwIfExists(id);
     }
 
     private void throwIfExists(final Long id) {
-        if (userService.existsById(id)) {
-            throw new UserAlreadyExistsException();
+        if (clientService.existsByTelegramId(id)) {
+            throw new ClientAlreadyExistsException();
         }
     }
 }

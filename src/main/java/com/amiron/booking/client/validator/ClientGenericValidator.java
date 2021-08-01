@@ -1,9 +1,9 @@
-package com.amiron.booking.user.validator;
+package com.amiron.booking.client.validator;
 
 import com.amiron.booking.bot.validator.EmailValidator;
 import com.amiron.booking.bot.validator.PhoneNumberValidator;
+import com.amiron.booking.client.model.Client;
 import com.amiron.booking.core.validator.RequiredFieldValidator;
-import com.amiron.booking.user.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -16,19 +16,19 @@ import java.util.Optional;
 @AllArgsConstructor
 @Validated
 @Component
-public class UserGenericValidator {
+public class ClientGenericValidator {
 
     private final RequiredFieldValidator requiredFieldValidator;
     private final PhoneNumberValidator phoneNumberValidator;
     private final EmailValidator emailValidator;
 
-    public void validate(final User user) {
-        final Long id = user.getId();
-        final String username = user.getUsername();
-        final Optional<String> firstNameOpt = Optional.ofNullable(user.getFirstName());
-        final Optional<String> lastNameOpt = Optional.ofNullable(user.getLastName());
-        final Optional<String> emailOpt = Optional.ofNullable(user.getEmail());
-        final Optional<String> phoneNumberOpt = Optional.ofNullable(user.getPhoneNumber());
+    public void validate(final Client client) {
+        final Long id = client.getId();
+        final String username = client.getUsername();
+        final Optional<String> firstNameOpt = Optional.ofNullable(client.getFirstName());
+        final Optional<String> lastNameOpt = Optional.ofNullable(client.getLastName());
+        final Optional<String> emailOpt = Optional.ofNullable(client.getEmail());
+        final Optional<String> phoneNumberOpt = Optional.ofNullable(client.getPhoneNumber());
 
         validateId(id);
         validateUsername(username);

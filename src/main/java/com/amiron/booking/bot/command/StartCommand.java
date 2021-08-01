@@ -3,15 +3,16 @@ package com.amiron.booking.bot.command;
 import com.amiron.booking.bot.model.BotCommand;
 import com.amiron.booking.bot.util.KeyboardBuilder;
 import com.amiron.booking.bot.util.MessageBuilder;
-import com.amiron.booking.user.facade.UserFacade;
-import com.amiron.booking.user.model.User;
-import com.amiron.booking.user.model.converter.UserConverter;
+import com.amiron.booking.client.facade.ClientFacade;
+import com.amiron.booking.client.model.Client;
+import com.amiron.booking.client.model.converter.ClientConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 import javax.validation.constraints.NotNull;
@@ -24,14 +25,15 @@ import javax.validation.constraints.NotNull;
 @Component
 public class StartCommand extends Command<Message> {
 
-    private final UserFacade userFacade;
+    private final ClientFacade userFacade;
 
     @Override
     public BotApiMethod<?> execute(@NotNull final Message message) {
         final Long chatId = message.getChatId();
-        final User user = UserConverter.fromTelegramUser(chatId, message.getFrom());
+        final User telegramUser = message.getFrom();
+        final Client client = ClientConverter.fromTelegramUser(chatId, telegramUser);
 
-        userFacade.onCreate(user);
+        userFacade.onCreate(client);
 
         return buildResponseMessage(chatId);
     }

@@ -3,9 +3,9 @@ package com.amiron.booking.bot.command;
 import com.amiron.booking.bot.model.BotCommand;
 import com.amiron.booking.bot.util.KeyboardBuilder;
 import com.amiron.booking.bot.util.MessageBuilder;
-import com.amiron.booking.user.facade.UserFacade;
-import com.amiron.booking.user.model.User;
-import com.amiron.booking.user.service.UserService;
+import com.amiron.booking.client.facade.ClientFacade;
+import com.amiron.booking.client.model.Client;
+import com.amiron.booking.client.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -26,18 +26,18 @@ import static com.amiron.booking.bot.model.BotCommand.SET_PHONE_NUMBER;
 @Component
 public class SetPhoneNumberCommand extends Command<Contact> {
 
-    private final UserService userService;
-    private final UserFacade userFacade;
+    private final ClientService clientService;
+    private final ClientFacade clientFacade;
 
     @Override
     public BotApiMethod<?> execute(@NotNull final Contact contact) {
         final Long userId = contact.getUserId();
         final String phoneNumber = contact.getPhoneNumber();
 
-        final User user = setPhoneNumberForExistingUser(userId, phoneNumber);
-        userFacade.onUpdate(user);
+        final Client client = setPhoneNumberForExistingUser(userId, phoneNumber);
+        clientFacade.onUpdate(client);
 
-        final Long chatId = user.getChatId();
+        final Long chatId = client.getChatId();
         return buildResponseMessage(chatId);
     }
 
@@ -46,10 +46,10 @@ public class SetPhoneNumberCommand extends Command<Contact> {
         return SET_PHONE_NUMBER;
     }
 
-    private User setPhoneNumberForExistingUser(final Long userId, final String phoneNumber) {
-        final User existingUser = userService.getById(userId);
-        existingUser.setPhoneNumber(phoneNumber);
-        return existingUser;
+    private Client setPhoneNumberForExistingUser(final Long userId, final String phoneNumber) {
+        final Client existingClient = clientService.getTelegramId(userId);
+        existingClient.setPhoneNumber(phoneNumber);
+        return existingClient;
     }
 
     private SendMessage buildResponseMessage(final Long chatId) {
