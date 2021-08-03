@@ -8,10 +8,11 @@ import com.amiron.booking.bot.validator.MessageTextGenericValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author Aliaksandr Miron
@@ -26,7 +27,7 @@ public class MessageTextFacadeImpl implements MessageTextFacade {
     private final CommandResolver<Message> commandResolver;
 
     @Override
-    public BotApiMethod<?> onReceive(@NotNull final Message message) {
+    public List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final Message message) {
         messageTextGenericValidator.validate(message);
 
         final String messageText = message.getText();

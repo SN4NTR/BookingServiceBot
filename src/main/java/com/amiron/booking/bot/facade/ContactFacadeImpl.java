@@ -6,10 +6,11 @@ import com.amiron.booking.bot.validator.ContactGenericValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 import static com.amiron.booking.bot.model.BotCommand.SET_PHONE_NUMBER;
 
@@ -25,7 +26,7 @@ public class ContactFacadeImpl implements ContactFacade {
     private final CommandResolver<Contact> commandResolver;
 
     @Override
-    public BotApiMethod<?> onReceive(@NotNull final Contact contact) {
+    public List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final Contact contact) {
         contactGenericValidator.validate(contact);
 
         final Command<Contact> command = commandResolver.resolve(SET_PHONE_NUMBER);

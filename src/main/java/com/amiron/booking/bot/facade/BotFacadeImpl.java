@@ -5,7 +5,7 @@ import com.amiron.booking.bot.service.BotUpdateTypeResolver;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Contact;
@@ -13,6 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 /**
  * @author Aliaksandr Miron
@@ -29,11 +32,11 @@ public class BotFacadeImpl implements BotFacade {
     private final MessageTextFacade messageTextFacade;
 
     @Override
-    public BotApiMethod<?> onUpdateEvent(@NotNull final Update update) {
+    public List<? extends PartialBotApiMethod<?>> onUpdateEvent(@NotNull final Update update) {
         return processUpdatesPayload(update);
     }
 
-    private BotApiMethod<?> processUpdatesPayload(final Update update) {
+    private List<? extends PartialBotApiMethod<?>> processUpdatesPayload(final Update update) {
         final BotUpdateType botUpdateType = botUpdateTypeResolver.resolve(update);
         return switch (botUpdateType) {
             case COMMAND -> processCommand(update.getMessage());
@@ -46,33 +49,34 @@ public class BotFacadeImpl implements BotFacade {
         };
     }
 
-    private BotApiMethod<?> processCommand(final Message commandMessage) {
+    private List<? extends PartialBotApiMethod<?>> processCommand(final Message commandMessage) {
         return messageCommandFacade.onReceive(commandMessage);
     }
 
-    private BotApiMethod<?> processText(final Message message) {
+    private List<? extends PartialBotApiMethod<?>> processText(final Message message) {
         return messageTextFacade.onReceive(message);
     }
 
-    private BotApiMethod<?> processCallbackQuery(final CallbackQuery callbackQuery) {
+    private List<? extends PartialBotApiMethod<?>> processCallbackQuery(final CallbackQuery callbackQuery) {
         return callbackQueryFacade.onReceive(callbackQuery);
     }
 
-    private BotApiMethod<?> processContact(final Message contactMessage) {
+    private List<? extends PartialBotApiMethod<?>> processContact(final Message contactMessage) {
         final Contact contact = contactMessage.getContact();
         return contactFacade.onReceive(contact);
     }
 
-    private BotApiMethod<?> processRestart(final Message message) {
+    private List<? extends PartialBotApiMethod<?>> processRestart(final Message message) {
         return null;
     }
 
-    private BotApiMethod<?> processStop(final Message message) {
+    private List<? extends PartialBotApiMethod<?>> processStop(final Message message) {
         return null;
     }
 
-    private BotApiMethod<?> processUnknownType(final Message message) {
+    private List<? extends PartialBotApiMethod<?>> processUnknownType(final Message message) {
         final Long chatId = message.getChatId();
-        return new SendMessage(String.valueOf(chatId), "Unknown command.");
+        final SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "Unknown command.");
+        return singletonList(sendMessage);
     }
 }

@@ -23,14 +23,14 @@ public class ClientGenericValidator {
     private final EmailValidator emailValidator;
 
     public void validate(final Client client) {
-        final Long id = client.getId();
+        final Long telegramId = client.getTelegramId();
         final String username = client.getUsername();
         final Optional<String> firstNameOpt = Optional.ofNullable(client.getFirstName());
         final Optional<String> lastNameOpt = Optional.ofNullable(client.getLastName());
         final Optional<String> emailOpt = Optional.ofNullable(client.getEmail());
         final Optional<String> phoneNumberOpt = Optional.ofNullable(client.getPhoneNumber());
 
-        validateId(id);
+        validateId(telegramId);
         validateUsername(username);
         firstNameOpt.ifPresent(this::validateFirstName);
         lastNameOpt.ifPresent(this::validateLastName);

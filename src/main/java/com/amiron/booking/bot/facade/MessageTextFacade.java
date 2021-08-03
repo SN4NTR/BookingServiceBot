@@ -1,14 +1,15 @@
 package com.amiron.booking.bot.facade;
 
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author Aliaksandr Miron
  */
 public interface MessageTextFacade {
 
-    BotApiMethod<?> onReceive(@NotNull final Message message);
+    List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final Message message);
 }

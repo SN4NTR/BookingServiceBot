@@ -37,10 +37,10 @@ public class ClientFacadeImpl implements ClientFacade {
     }
 
     private void validateOnCreate(final Client client) {
-        final Long id = client.getId();
+        final Long telegramId = client.getTelegramId();
 
         clientGenericValidator.validate(client);
-        clientExistenceValidator.validate(id);
+        clientExistenceValidator.validate(telegramId);
     }
 
     private void validateOnUpdate(final Client client) {

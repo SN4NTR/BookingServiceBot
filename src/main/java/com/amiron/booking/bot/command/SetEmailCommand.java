@@ -9,14 +9,16 @@ import com.amiron.booking.client.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 import static com.amiron.booking.bot.model.BotCommand.SET_EMAIL;
+import static java.util.Collections.singletonList;
 
 /**
  * @author Aliaksandr Miron
@@ -30,7 +32,7 @@ public class SetEmailCommand extends Command<Message> {
     private final ClientFacade userFacade;
 
     @Override
-    public BotApiMethod<?> execute(@NotNull final Message message) {
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Message message) {
         final Long userId = message.getFrom().getId();
         final String email = message.getText();
 
@@ -52,8 +54,9 @@ public class SetEmailCommand extends Command<Message> {
         return existingClient;
     }
 
-    private SendMessage buildResponseMessage(final Long chatId) {
+    private List<SendMessage> buildResponseMessage(final Long chatId) {
         final InlineKeyboardMarkup inlineKeyboardMarkup = KeyboardBuilder.buildInlineKeyboardMarkup();
-        return MessageBuilder.buildSendMessage(String.valueOf(chatId), "Please choose the service.", inlineKeyboardMarkup);
+        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please choose the service.", inlineKeyboardMarkup);
+        return singletonList(sendMessage);
     }
 }

@@ -9,14 +9,16 @@ import com.amiron.booking.client.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 import static com.amiron.booking.bot.model.BotCommand.SET_PHONE_NUMBER;
+import static java.util.Collections.singletonList;
 
 /**
  * @author Aliaksandr Miron
@@ -30,7 +32,7 @@ public class SetPhoneNumberCommand extends Command<Contact> {
     private final ClientFacade clientFacade;
 
     @Override
-    public BotApiMethod<?> execute(@NotNull final Contact contact) {
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Contact contact) {
         final Long userId = contact.getUserId();
         final String phoneNumber = contact.getPhoneNumber();
 
@@ -52,8 +54,9 @@ public class SetPhoneNumberCommand extends Command<Contact> {
         return existingClient;
     }
 
-    private SendMessage buildResponseMessage(final Long chatId) {
+    private List<SendMessage> buildResponseMessage(final Long chatId) {
         final ReplyKeyboardRemove keyboardRemove = KeyboardBuilder.buildKeyboardRemove();
-        return MessageBuilder.buildSendMessage(String.valueOf(chatId), "Please enter your email.", keyboardRemove);
+        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please enter your email.", keyboardRemove);
+        return singletonList(sendMessage);
     }
 }

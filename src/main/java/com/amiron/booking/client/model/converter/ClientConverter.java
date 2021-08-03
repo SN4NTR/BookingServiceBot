@@ -14,7 +14,7 @@ public class ClientConverter {
 
     public static Client fromTelegramUser(final Long chatId, final User telegramUser) {
         final Client client = new Client();
-        client.setId(telegramUser.getId());
+        client.setTelegramId(telegramUser.getId());
         client.setUsername(telegramUser.getUserName());
         client.setFirstName(telegramUser.getFirstName());
         client.setLastName(telegramUser.getLastName());
