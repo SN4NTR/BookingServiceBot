@@ -44,11 +44,11 @@ public class BotHandler extends TelegramLongPollingBot {
     public void onUpdateReceived(final Update update) {
         final List<? extends PartialBotApiMethod<?>> messages = botFacade.onUpdateEvent(update);
 
-        sendMessagesWithDelay(messages);
+        sendMessages(messages);
     }
 
     @SneakyThrows
-    private void sendMessagesWithDelay(final List<? extends PartialBotApiMethod<?>> messages) {
+    private void sendMessages(final List<? extends PartialBotApiMethod<?>> messages) {
         for (PartialBotApiMethod<?> message : messages) {
             sendMessage(message);
 
@@ -61,7 +61,7 @@ public class BotHandler extends TelegramLongPollingBot {
     private void sendMessage(final PartialBotApiMethod<?> message) {
         final MessageType messageType = messageTypeResolver.resolve(message);
         switch (messageType) {
-            case SIMPLE_MESSAGE -> execute((BotApiMethod<?>) message);
+            case TEXT -> execute((BotApiMethod<?>) message);
             case PHOTO -> execute((SendPhoto) message);
             default -> throw new RuntimeException();
         }

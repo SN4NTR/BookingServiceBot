@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.amiron.booking.bot.model.BotCommand.BOOK_NAILS;
 import static com.amiron.booking.bot.model.BotCommand.SET_EMAIL;
 import static java.util.Collections.singletonList;
 
@@ -55,7 +56,7 @@ public class SetEmailCommand extends Command<Message> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final InlineKeyboardMarkup inlineKeyboardMarkup = KeyboardBuilder.buildInlineKeyboardMarkup();
+        final InlineKeyboardMarkup inlineKeyboardMarkup = KeyboardBuilder.buildInlineKeyboardMarkup("Book nails service", BOOK_NAILS.getValue());
         final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please choose the service.", inlineKeyboardMarkup);
         return singletonList(sendMessage);
     }

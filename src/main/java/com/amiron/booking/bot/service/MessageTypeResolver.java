@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 
 import static com.amiron.booking.bot.model.MessageType.PHOTO;
-import static com.amiron.booking.bot.model.MessageType.SIMPLE_MESSAGE;
+import static com.amiron.booking.bot.model.MessageType.TEXT;
 import static com.amiron.booking.bot.model.MessageType.UNKNOWN;
 
 /**
@@ -20,7 +20,7 @@ public class MessageTypeResolver {
 
     public MessageType resolve(final PartialBotApiMethod<?> message) {
         if (message instanceof BotApiMethod) {
-            return SIMPLE_MESSAGE;
+            return TEXT;
         } else if (message instanceof SendPhoto) {
             return PHOTO;
         }

@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.amiron.booking.bot.model.BotCommand.START;
 import static java.util.Collections.singletonList;
 
 /**
@@ -43,7 +44,7 @@ public class StartCommand extends Command<Message> {
 
     @Override
     public BotCommand getCommand() {
-        return BotCommand.START;
+        return START;
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {

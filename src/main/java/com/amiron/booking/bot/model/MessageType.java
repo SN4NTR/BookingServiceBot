@@ -5,7 +5,7 @@ package com.amiron.booking.bot.model;
  */
 public enum MessageType {
 
-    SIMPLE_MESSAGE,
+    TEXT,
     PHOTO,
     UNKNOWN
 }

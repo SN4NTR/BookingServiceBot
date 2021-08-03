@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import static com.amiron.booking.bot.model.BotCommand.BOOK_NAILS;
 import static java.util.Collections.singletonList;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -31,10 +30,10 @@ public class KeyboardBuilder {
         return new ReplyKeyboardRemove(true);
     }
 
-    public static InlineKeyboardMarkup buildInlineKeyboardMarkup() {
+    public static InlineKeyboardMarkup buildInlineKeyboardMarkup(final String text, final String callback) {
         final InlineKeyboardButton keyboardButton = new InlineKeyboardButton();
-        keyboardButton.setText("Book nails service");
-        keyboardButton.setCallbackData(BOOK_NAILS.getValue());
+        keyboardButton.setText(text);
+        keyboardButton.setCallbackData(callback);
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(singletonList(keyboardButton))
                 .build();

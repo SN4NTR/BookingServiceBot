@@ -15,6 +15,7 @@ public enum BotCommand {
     SET_EMAIL("/setEmail"),
     SET_PHONE_NUMBER("/setPhoneNumber"),
     BOOK_NAILS("/bookNails"),
+    BOOK_MASTER("/bookMaster"),
     UNKNOWN("unknown");
 
     private final String value;
