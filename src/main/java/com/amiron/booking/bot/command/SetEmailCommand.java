@@ -56,7 +56,7 @@ public class SetEmailCommand extends Command<Message> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final InlineKeyboardMarkup inlineKeyboardMarkup = KeyboardBuilder.buildInlineKeyboardMarkup("Book nails service", BOOK_NAILS.getValue());
+        final InlineKeyboardMarkup inlineKeyboardMarkup = KeyboardBuilder.buildInlineKeyboardMarkup("Book nails service", BOOK_NAILS.getFormattedValue());
         final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please choose the service.", inlineKeyboardMarkup);
         return singletonList(sendMessage);
     }

@@ -1,7 +1,6 @@
 package com.amiron.booking.bot.command;
 
 import com.amiron.booking.bot.model.BotCommand;
-import com.amiron.booking.bot.util.KeyboardBuilder;
 import com.amiron.booking.bot.util.MessageBuilder;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
@@ -12,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Contact;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -55,8 +53,7 @@ public class SetPhoneNumberCommand extends Command<Contact> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final ReplyKeyboardRemove keyboardRemove = KeyboardBuilder.buildKeyboardRemove();
-        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please enter your email.", keyboardRemove);
+        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please enter your email.", null);
         return singletonList(sendMessage);
     }
 }

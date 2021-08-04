@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -23,6 +24,7 @@ public class KeyboardBuilder {
         final KeyboardRow firstKeyboardRow = new KeyboardRow(singletonList(sendPhoneNumberButton));
         final ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(singletonList(firstKeyboardRow));
         keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setOneTimeKeyboard(true);
         return keyboardMarkup;
     }
 
@@ -37,5 +39,18 @@ public class KeyboardBuilder {
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(singletonList(keyboardButton))
                 .build();
+    }
+
+    public static InlineKeyboardMarkup buildInlineKeyboardMarkup(final InlineKeyboardButton... buttons) {
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(asList(buttons))
+                .build();
+    }
+
+    public static InlineKeyboardButton buildInlineKeyboardButton(final String text, final String callback) {
+        final InlineKeyboardButton keyboardButton = new InlineKeyboardButton();
+        keyboardButton.setText(text);
+        keyboardButton.setCallbackData(callback);
+        return keyboardButton;
     }
 }

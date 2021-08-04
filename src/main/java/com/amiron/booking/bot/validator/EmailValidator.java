@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.util.regex.Pattern;
+
+import static com.amiron.booking.bot.util.EmailUtils.EMAIL_REGEX;
 
 /**
  * @author Aliaksandr Miron
@@ -13,8 +14,6 @@ import java.util.regex.Pattern;
 @Validated
 @Component
 public class EmailValidator {
-
-    public static final Pattern EMAIL_REGEX = Pattern.compile("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$");
 
     public void validate(@NotNull final String email) {
         throwIfPatternDoesNotMatch(email);

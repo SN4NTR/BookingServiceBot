@@ -22,11 +22,9 @@ public class CallbackQueryGenericValidator {
     public void validate(@NotNull final CallbackQuery callbackQuery) {
         final Message message = callbackQuery.getMessage();
         final Long chatId = message.getChatId();
-        final String text = message.getText();
         final String data = callbackQuery.getData();
 
         requiredFieldValidator.validate(chatId);
-        requiredFieldValidator.validate(text);
         requiredFieldValidator.validate(data);
     }
 }

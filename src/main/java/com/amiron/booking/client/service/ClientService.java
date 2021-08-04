@@ -13,6 +13,8 @@ public interface ClientService {
 
     Client getTelegramId(@NotNull final Long id);
 
+    Client getByUsername(@NotNull final String username);
+
     Client update(@NotNull final Client client);
 
     boolean existsByTelegramId(@NotNull final Long id);

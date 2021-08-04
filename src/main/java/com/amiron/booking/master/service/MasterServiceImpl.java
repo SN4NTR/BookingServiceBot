@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Aliaksandr Miron
@@ -21,5 +24,10 @@ public class MasterServiceImpl implements MasterService {
     @Override
     public List<Master> getAll() {
         return masterRepository.findAll();
+    }
+
+    @Override
+    public Master getById(@NotNull final UUID id) {
+        return masterRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }

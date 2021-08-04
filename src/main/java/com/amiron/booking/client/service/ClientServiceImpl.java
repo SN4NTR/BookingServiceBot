@@ -30,6 +30,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public Client getByUsername(@NotNull final String username) {
+        return clientRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
     public Client update(@NotNull final Client client) {
         final Long telegramId = client.getTelegramId();
         final Client existingClient = getTelegramId(telegramId);

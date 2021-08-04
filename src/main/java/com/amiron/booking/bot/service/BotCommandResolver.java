@@ -9,7 +9,9 @@ import javax.validation.constraints.NotNull;
 
 import static com.amiron.booking.bot.model.BotCommand.SET_EMAIL;
 import static com.amiron.booking.bot.model.BotCommand.UNKNOWN;
-import static com.amiron.booking.bot.validator.EmailValidator.EMAIL_REGEX;
+import static com.amiron.booking.bot.util.CommandUtils.isCommandWithUuid;
+import static com.amiron.booking.bot.util.CommandUtils.removeUuidPartFromCommand;
+import static com.amiron.booking.bot.util.EmailUtils.isEmail;
 
 /**
  * @author Aliaksandr Miron
@@ -19,7 +21,8 @@ import static com.amiron.booking.bot.validator.EmailValidator.EMAIL_REGEX;
 public class BotCommandResolver {
 
     public BotCommand resolveByCommandText(@NotNull final String commandText) {
-        return BotCommand.findByValue(commandText).orElseThrow(CommandDoesNotExistException::new);
+        final String pureCommandText = removeUuidFromCommandIfNeeded(commandText);
+        return BotCommand.findByValue(pureCommandText).orElseThrow(CommandDoesNotExistException::new);
     }
 
     public BotCommand resolveByMessageText(@NotNull final String messageText) {
@@ -28,7 +31,9 @@ public class BotCommandResolver {
                 : UNKNOWN;
     }
 
-    private boolean isEmail(final String text) {
-        return EMAIL_REGEX.matcher(text).matches();
+    private String removeUuidFromCommandIfNeeded(final String commandText) {
+        return isCommandWithUuid(commandText)
+                ? removeUuidPartFromCommand(commandText)
+                : commandText;
     }
 }

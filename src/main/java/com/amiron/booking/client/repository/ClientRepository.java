@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface ClientRepository extends JpaRepository<Client, UUID> {
 
     Optional<Client> findByTelegramId(@NotNull final Long telegramId);
+
+    Optional<Client> findByUsername(@NotNull final String username);
 }
