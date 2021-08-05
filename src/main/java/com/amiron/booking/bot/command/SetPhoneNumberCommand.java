@@ -1,7 +1,6 @@
 package com.amiron.booking.bot.command;
 
 import com.amiron.booking.bot.model.BotCommand;
-import com.amiron.booking.bot.util.MessageBuilder;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.service.ClientService;
@@ -16,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static com.amiron.booking.bot.model.BotCommand.SET_PHONE_NUMBER;
+import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.util.Collections.singletonList;
 
 /**
@@ -53,7 +53,7 @@ public class SetPhoneNumberCommand extends Command<Contact> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please enter your email.", null);
+        final SendMessage sendMessage = buildSendMessage(chatId, "Phone number is changed successfully!", null);
         return singletonList(sendMessage);
     }
 }

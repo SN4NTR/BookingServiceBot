@@ -1,8 +1,6 @@
 package com.amiron.booking.bot.command;
 
 import com.amiron.booking.bot.model.BotCommand;
-import com.amiron.booking.bot.util.KeyboardBuilder;
-import com.amiron.booking.bot.util.MessageBuilder;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.service.ClientService;
@@ -12,13 +10,12 @@ import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.BotCommand.BOOK_NAILS;
 import static com.amiron.booking.bot.model.BotCommand.SET_EMAIL;
+import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.util.Collections.singletonList;
 
 /**
@@ -56,8 +53,7 @@ public class SetEmailCommand extends Command<Message> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final InlineKeyboardMarkup inlineKeyboardMarkup = KeyboardBuilder.buildInlineKeyboardMarkup("Book nails service", BOOK_NAILS.getFormattedValue());
-        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please choose the service.", inlineKeyboardMarkup);
+        final SendMessage sendMessage = buildSendMessage(chatId, "Email changed successfully!", null);
         return singletonList(sendMessage);
     }
 }

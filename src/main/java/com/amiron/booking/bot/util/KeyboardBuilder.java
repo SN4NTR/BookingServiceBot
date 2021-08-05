@@ -8,6 +8,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static lombok.AccessLevel.PRIVATE;
@@ -41,10 +45,13 @@ public class KeyboardBuilder {
                 .build();
     }
 
-    public static InlineKeyboardMarkup buildInlineKeyboardMarkup(final InlineKeyboardButton... buttons) {
-        return InlineKeyboardMarkup.builder()
-                .keyboardRow(asList(buttons))
-                .build();
+    public static InlineKeyboardMarkup buildInlineKeyboardMarkupWithButtonsFromNewLine(final InlineKeyboardButton... buttons) {
+        final InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        final List<List<InlineKeyboardButton>> inlineButtons = Arrays.stream(buttons)
+                .map(Arrays::asList)
+                .collect(Collectors.toList());
+        keyboardMarkup.setKeyboard(inlineButtons);
+        return keyboardMarkup;
     }
 
     public static InlineKeyboardButton buildInlineKeyboardButton(final String text, final String callback) {
@@ -52,5 +59,11 @@ public class KeyboardBuilder {
         keyboardButton.setText(text);
         keyboardButton.setCallbackData(callback);
         return keyboardButton;
+    }
+
+    public static InlineKeyboardMarkup buildInlineKeyboardMarkupWithSequentialButtons(final InlineKeyboardButton... buttons) {
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(asList(buttons))
+                .build();
     }
 }

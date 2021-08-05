@@ -7,10 +7,16 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import static com.amiron.booking.bot.model.BotCommand.ACCOUNT;
+import static com.amiron.booking.bot.model.BotCommand.BOOKINGS;
+import static com.amiron.booking.bot.model.BotCommand.BOOK_SERVICE;
+import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
+import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -52,6 +58,29 @@ public class MessageBuilder {
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
+        editMessageText.enableHtml(true);
         return editMessageText;
+    }
+
+    public static SendMessage buildMenuMessage(final Long chatId) {
+        final String menuText = buildMenuText();
+        final InlineKeyboardMarkup keyboardMarkup = buildKeyboardMarkup();
+        return buildSendMessage(chatId, menuText, keyboardMarkup);
+    }
+
+    private static InlineKeyboardMarkup buildKeyboardMarkup() {
+        final InlineKeyboardButton accountButton = buildInlineKeyboardButton("Account", ACCOUNT.getOriginValue());
+        final InlineKeyboardButton bookServiceButton = buildInlineKeyboardButton("Book Service", BOOK_SERVICE.getOriginValue());
+        final InlineKeyboardButton bookingsButton = buildInlineKeyboardButton("Bookings", BOOKINGS.getOriginValue());
+        return buildInlineKeyboardMarkupWithButtonsFromNewLine(accountButton, bookServiceButton, bookingsButton);
+    }
+
+    private static String buildMenuText() {
+        return "This menu is used to check your account settings and existing bookings. " +
+                "Click provided buttons for required actions.\n\n" +
+                "<b>Menu</b>\n" +
+                "Account - check your account info\n" +
+                "Book Service - book required service\n" +
+                "Bookings - check your existing bookings\n";
     }
 }

@@ -10,12 +10,15 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  */
 public enum BotCommand {
 
-    BOOKINGS("/bookings"),
-    ACCOUNT("/account"),
-    MENU("/menu"),
     START("/start"),
-    SET_EMAIL("/setEmail"),
-    SET_PHONE_NUMBER("/setPhoneNumber"),
+    MENU("/menu"),
+    ACCOUNT("/account"),
+    BOOKINGS("/account/bookings"),
+    SET_EMAIL("/account/setEmail"),
+    CHANGE_EMAIL("/account/changeEmail"),
+    SET_PHONE_NUMBER("/account/setPhoneNumber"),
+    CHANGE_PHONE_NUMBER("/account/changePhoneNumber"),
+    BOOK_SERVICE("/bookService"),
     BOOK_NAILS("/bookNails"),
     BOOK_MASTER("/bookMaster/%s"),
     UNKNOWN("unknown");

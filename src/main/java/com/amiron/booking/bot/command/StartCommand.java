@@ -1,8 +1,6 @@
 package com.amiron.booking.bot.command;
 
 import com.amiron.booking.bot.model.BotCommand;
-import com.amiron.booking.bot.util.KeyboardBuilder;
-import com.amiron.booking.bot.util.MessageBuilder;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.model.converter.ClientConverter;
@@ -13,13 +11,14 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static com.amiron.booking.bot.model.BotCommand.START;
-import static java.util.Collections.singletonList;
+import static com.amiron.booking.bot.util.MessageBuilder.buildMenuMessage;
+import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
+import static java.util.Arrays.asList;
 
 /**
  * @author Aliaksandr Miron
@@ -48,8 +47,8 @@ public class StartCommand extends Command<Message> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final ReplyKeyboardMarkup keyboardMarkup = KeyboardBuilder.buildMarkupForPhoneNumber();
-        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please click button to send your mobile number.", keyboardMarkup);
-        return singletonList(sendMessage);
+        final SendMessage message = buildSendMessage(chatId, "Welcome to Booking Bot!", null);
+        final SendMessage menuMessage = buildMenuMessage(chatId);
+        return asList(message, menuMessage);
     }
 }

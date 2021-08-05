@@ -14,7 +14,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @NoArgsConstructor(access = PRIVATE)
 public class CommandUtils {
 
-    private static final Pattern COMMAND_WITH_UUID_PATTERN = Pattern.compile("(/)([a-zA-Z]+)((/)([a-zA-Z0-9-]+))");
+    private static final Pattern COMMAND_WITH_UUID_PATTERN = Pattern.compile("(/)([a-zA-Z]+)((/)([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}))");
     private static final int UUID_WITH_SLASH_GROUP_NUMBER = 3;
     private static final int UUID_GROUP_NUMBER = 5;
 
