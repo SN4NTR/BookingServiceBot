@@ -1,4 +1,4 @@
-package com.amiron.booking.bot.util;
+package com.amiron.booking.core.util;
 
 import lombok.NoArgsConstructor;
 

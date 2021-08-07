@@ -1,6 +1,6 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.service.ClientService;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Contact;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.BotCommand.SET_PHONE_NUMBER;
+import static com.amiron.booking.bot.model.UserCommand.SET_PHONE_NUMBER;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.util.Collections.singletonList;
 
@@ -24,7 +24,7 @@ import static java.util.Collections.singletonList;
 @AllArgsConstructor
 @Validated
 @Component
-public class SetPhoneNumberCommand extends Command<Contact> {
+public class SetPhoneNumberBotCommand extends BotCommand<Contact> {
 
     private final ClientService clientService;
     private final ClientFacade clientFacade;
@@ -42,7 +42,7 @@ public class SetPhoneNumberCommand extends Command<Contact> {
     }
 
     @Override
-    public BotCommand getCommand() {
+    public UserCommand getCommand() {
         return SET_PHONE_NUMBER;
     }
 
@@ -53,7 +53,7 @@ public class SetPhoneNumberCommand extends Command<Contact> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage sendMessage = buildSendMessage(chatId, "Phone number is changed successfully!", null);
+        final SendMessage sendMessage = buildSendMessage(chatId, "Phone number is changed successfully\\!", null);
         return singletonList(sendMessage);
     }
 }

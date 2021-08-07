@@ -3,7 +3,7 @@ package com.amiron.booking.bot.handler;
 import com.amiron.booking.bot.config.BotConfigProperties;
 import com.amiron.booking.bot.facade.BotFacade;
 import com.amiron.booking.bot.model.MessageType;
-import com.amiron.booking.bot.service.MessageTypeResolver;
+import com.amiron.booking.bot.resolver.BotMessageTypeResolver;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class BotHandler extends TelegramLongPollingBot {
 
     private final BotConfigProperties botConfigurationProperties;
     private final BotFacade botFacade;
-    private final MessageTypeResolver messageTypeResolver;
+    private final BotMessageTypeResolver botMessageTypeResolver;
 
     @Override
     public String getBotUsername() {
@@ -59,7 +59,7 @@ public class BotHandler extends TelegramLongPollingBot {
     // TODO correct photo sending (something with content)
     @SneakyThrows
     private void sendMessage(final PartialBotApiMethod<?> message) {
-        final MessageType messageType = messageTypeResolver.resolve(message);
+        final MessageType messageType = botMessageTypeResolver.resolve(message);
         switch (messageType) {
             case TEXT -> execute((BotApiMethod<?>) message);
             case PHOTO -> execute((SendPhoto) message);

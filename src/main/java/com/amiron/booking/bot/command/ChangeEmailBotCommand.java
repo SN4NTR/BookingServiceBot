@@ -1,6 +1,6 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.BotCommand.CHANGE_EMAIL;
+import static com.amiron.booking.bot.model.UserCommand.CHANGE_EMAIL;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.util.Collections.singletonList;
 
@@ -19,7 +19,7 @@ import static java.util.Collections.singletonList;
  */
 @Validated
 @Component
-public class ChangeEmailCommand extends Command<CallbackQuery> {
+public class ChangeEmailBotCommand extends BotCommand<CallbackQuery> {
 
     @Override
     public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
@@ -28,7 +28,7 @@ public class ChangeEmailCommand extends Command<CallbackQuery> {
     }
 
     @Override
-    public BotCommand getCommand() {
+    public UserCommand getCommand() {
         return CHANGE_EMAIL;
     }
 

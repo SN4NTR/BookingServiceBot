@@ -1,5 +1,6 @@
 package com.amiron.booking.bot.validator;
 
+import com.amiron.booking.core.validator.PhoneNumberValidator;
 import com.amiron.booking.core.validator.RequiredFieldValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

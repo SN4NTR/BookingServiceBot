@@ -1,12 +1,12 @@
-package com.amiron.booking.bot.validator;
+package com.amiron.booking.core.validator;
 
-import com.amiron.booking.bot.exception.EmailInvalidFormatException;
+import com.amiron.booking.core.exception.EmailInvalidFormatException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 
-import static com.amiron.booking.bot.util.EmailUtils.EMAIL_REGEX;
+import static com.amiron.booking.core.util.EmailUtils.EMAIL_REGEX;
 
 /**
  * @author Aliaksandr Miron

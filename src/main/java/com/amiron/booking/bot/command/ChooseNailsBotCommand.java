@@ -1,6 +1,6 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.bot.util.MessageBuilder;
 import com.amiron.booking.master.model.Master;
 import com.amiron.booking.master.service.MasterService;
@@ -17,8 +17,8 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.BotCommand.BOOK_MASTER;
-import static com.amiron.booking.bot.model.BotCommand.BOOK_NAILS;
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MASTER;
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_NAILS;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkup;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendPhotoMessage;
 import static java.lang.String.format;
@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 @Validated
 @Component
-public class BookNailsCommand extends Command<CallbackQuery> {
+public class ChooseNailsBotCommand extends BotCommand<CallbackQuery> {
 
     private final MasterService masterService;
 
@@ -51,8 +51,8 @@ public class BookNailsCommand extends Command<CallbackQuery> {
     }
 
     @Override
-    public BotCommand getCommand() {
-        return BOOK_NAILS;
+    public UserCommand getCommand() {
+        return CHOOSE_NAILS;
     }
 
     private EditMessageText buildChooseMasterMessage(final Long chatId, final Integer messageId) {
@@ -70,7 +70,7 @@ public class BookNailsCommand extends Command<CallbackQuery> {
         final byte[] masterPhoto = master.getPhoto();
         final String masterId = master.getId().toString();
 
-        final InlineKeyboardMarkup keyboardMarkup = buildInlineKeyboardMarkup("Book master", format(BOOK_MASTER.getOriginValue(), masterId));
+        final InlineKeyboardMarkup keyboardMarkup = buildInlineKeyboardMarkup("Book master", format(CHOOSE_MASTER.getOriginValue(), masterId));
         final SendPhoto photoMessage = buildSendPhotoMessage(chatId, masterPhoto, masterInfoText);
         photoMessage.setReplyMarkup(keyboardMarkup);
 

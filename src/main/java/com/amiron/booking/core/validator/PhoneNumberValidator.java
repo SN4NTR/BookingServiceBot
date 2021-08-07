@@ -1,6 +1,6 @@
-package com.amiron.booking.bot.validator;
+package com.amiron.booking.core.validator;
 
-import com.amiron.booking.bot.exception.PhoneNumberInvalidFormatException;
+import com.amiron.booking.core.exception.PhoneNumberInvalidFormatException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 

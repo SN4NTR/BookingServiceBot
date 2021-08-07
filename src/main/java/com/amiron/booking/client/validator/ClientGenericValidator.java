@@ -1,8 +1,8 @@
 package com.amiron.booking.client.validator;
 
-import com.amiron.booking.bot.validator.EmailValidator;
-import com.amiron.booking.bot.validator.PhoneNumberValidator;
 import com.amiron.booking.client.model.Client;
+import com.amiron.booking.core.validator.EmailValidator;
+import com.amiron.booking.core.validator.PhoneNumberValidator;
 import com.amiron.booking.core.validator.RequiredFieldValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

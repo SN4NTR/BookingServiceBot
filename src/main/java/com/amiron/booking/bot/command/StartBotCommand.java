@@ -1,6 +1,6 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.model.converter.ClientConverter;
@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.BotCommand.START;
+import static com.amiron.booking.bot.model.UserCommand.START;
 import static com.amiron.booking.bot.util.MessageBuilder.buildMenuMessage;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.util.Arrays.asList;
@@ -26,7 +26,7 @@ import static java.util.Arrays.asList;
 @AllArgsConstructor
 @Validated
 @Component
-public class StartCommand extends Command<Message> {
+public class StartBotCommand extends BotCommand<Message> {
 
     private final ClientFacade userFacade;
 
@@ -42,12 +42,12 @@ public class StartCommand extends Command<Message> {
     }
 
     @Override
-    public BotCommand getCommand() {
+    public UserCommand getCommand() {
         return START;
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage message = buildSendMessage(chatId, "Welcome to Booking Bot!", null);
+        final SendMessage message = buildSendMessage(chatId, "Welcome to Booking Bot\\!", null);
         final SendMessage menuMessage = buildMenuMessage(chatId);
         return asList(message, menuMessage);
     }

@@ -1,6 +1,6 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.service.ClientService;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.BotCommand.SET_EMAIL;
+import static com.amiron.booking.bot.model.UserCommand.SET_EMAIL;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.util.Collections.singletonList;
 
@@ -24,7 +24,7 @@ import static java.util.Collections.singletonList;
 @AllArgsConstructor
 @Validated
 @Component
-public class SetEmailCommand extends Command<Message> {
+public class SetEmailBotCommand extends BotCommand<Message> {
 
     private final ClientService clientService;
     private final ClientFacade userFacade;
@@ -42,7 +42,7 @@ public class SetEmailCommand extends Command<Message> {
     }
 
     @Override
-    public BotCommand getCommand() {
+    public UserCommand getCommand() {
         return SET_EMAIL;
     }
 
@@ -53,7 +53,7 @@ public class SetEmailCommand extends Command<Message> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage sendMessage = buildSendMessage(chatId, "Email changed successfully!", null);
+        final SendMessage sendMessage = buildSendMessage(chatId, "Email changed successfully\\!", null);
         return singletonList(sendMessage);
     }
 }

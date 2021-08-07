@@ -1,6 +1,6 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.BotCommand.BOOK_NAILS;
-import static com.amiron.booking.bot.model.BotCommand.BOOK_SERVICE;
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_NAILS;
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_SERVICES;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static com.amiron.booking.bot.util.MessageBuilder.buildEditedMessageText;
@@ -24,7 +24,7 @@ import static java.util.Collections.singletonList;
  */
 @Validated
 @Component
-public class BookServiceCommand extends Command<CallbackQuery> {
+public class ChooseServiceBotCommand extends BotCommand<CallbackQuery> {
 
     @Override
     public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
@@ -34,8 +34,8 @@ public class BookServiceCommand extends Command<CallbackQuery> {
     }
 
     @Override
-    public BotCommand getCommand() {
-        return BOOK_SERVICE;
+    public UserCommand getCommand() {
+        return CHOOSE_SERVICES;
     }
 
     private List<EditMessageText> buildResponseMessage(final Long chatId, final Integer messageId) {
@@ -46,7 +46,7 @@ public class BookServiceCommand extends Command<CallbackQuery> {
     }
 
     private InlineKeyboardMarkup buildKeyboardMarkup() {
-        final InlineKeyboardButton bookNailsButton = buildInlineKeyboardButton("Book nails", BOOK_NAILS.getOriginValue());
+        final InlineKeyboardButton bookNailsButton = buildInlineKeyboardButton("Book nails", CHOOSE_NAILS.getOriginValue());
         return buildInlineKeyboardMarkupWithButtonsFromNewLine(bookNailsButton);
     }
 }

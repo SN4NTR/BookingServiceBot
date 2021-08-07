@@ -1,7 +1,7 @@
 package com.amiron.booking.bot.facade;
 
 import com.amiron.booking.bot.model.BotUpdateType;
-import com.amiron.booking.bot.service.BotUpdateTypeResolver;
+import com.amiron.booking.bot.resolver.BotUpdateTypeResolver;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -76,7 +76,7 @@ public class BotFacadeImpl implements BotFacade {
 
     private List<? extends PartialBotApiMethod<?>> processUnknownType(final Message message) {
         final Long chatId = message.getChatId();
-        final SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "Unknown command.");
+        final SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "Unknown command\\.");
         return singletonList(sendMessage);
     }
 }

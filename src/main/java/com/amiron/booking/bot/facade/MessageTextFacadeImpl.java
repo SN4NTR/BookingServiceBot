@@ -1,9 +1,9 @@
 package com.amiron.booking.bot.facade;
 
-import com.amiron.booking.bot.command.Command;
-import com.amiron.booking.bot.command.CommandResolver;
-import com.amiron.booking.bot.model.BotCommand;
-import com.amiron.booking.bot.service.BotCommandResolver;
+import com.amiron.booking.bot.command.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
+import com.amiron.booking.bot.resolver.BotCommandResolver;
+import com.amiron.booking.bot.resolver.UserCommandResolver;
 import com.amiron.booking.bot.validator.MessageTextGenericValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,17 +23,17 @@ import java.util.List;
 public class MessageTextFacadeImpl implements MessageTextFacade {
 
     private final MessageTextGenericValidator messageTextGenericValidator;
-    private final BotCommandResolver botCommandResolver;
-    private final CommandResolver<Message> commandResolver;
+    private final UserCommandResolver userCommandResolver;
+    private final BotCommandResolver<Message> botCommandResolver;
 
     @Override
     public List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final Message message) {
         messageTextGenericValidator.validate(message);
 
         final String messageText = message.getText();
-        final BotCommand botCommand = botCommandResolver.resolveByMessageText(messageText);
-        final Command<Message> command = commandResolver.resolve(botCommand);
+        final UserCommand userCommand = userCommandResolver.resolveByMessageText(messageText);
+        final BotCommand<Message> botCommand = botCommandResolver.resolve(userCommand);
 
-        return command.execute(message);
+        return botCommand.execute(message);
     }
 }

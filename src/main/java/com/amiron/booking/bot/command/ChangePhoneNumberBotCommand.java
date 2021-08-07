@@ -1,6 +1,6 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.bot.util.KeyboardBuilder;
 import com.amiron.booking.bot.util.MessageBuilder;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.BotCommand.CHANGE_PHONE_NUMBER;
+import static com.amiron.booking.bot.model.UserCommand.CHANGE_PHONE_NUMBER;
 import static java.util.Collections.singletonList;
 
 /**
@@ -21,7 +21,7 @@ import static java.util.Collections.singletonList;
  */
 @Validated
 @Component
-public class ChangePhoneNumberCommand extends Command<CallbackQuery> {
+public class ChangePhoneNumberBotCommand extends BotCommand<CallbackQuery> {
 
     @Override
     public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
@@ -30,13 +30,13 @@ public class ChangePhoneNumberCommand extends Command<CallbackQuery> {
     }
 
     @Override
-    public BotCommand getCommand() {
+    public UserCommand getCommand() {
         return CHANGE_PHONE_NUMBER;
     }
 
     private List<SendMessage> buildSendPhoneNumberMessage(final Long chatId) {
         final ReplyKeyboardMarkup keyboardMarkup = KeyboardBuilder.buildMarkupForPhoneNumber();
-        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please click button to send your phone number.", keyboardMarkup);
+        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please click button to send your phone number\\.", keyboardMarkup);
         return singletonList(sendMessage);
     }
 }

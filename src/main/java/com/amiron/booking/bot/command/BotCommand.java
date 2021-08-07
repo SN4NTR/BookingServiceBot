@@ -1,6 +1,6 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import lombok.Data;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -12,9 +12,9 @@ import java.util.List;
  * @author Aliaksandr Miron
  */
 @Data
-public abstract class Command<T extends BotApiObject> {
+public abstract class BotCommand<T extends BotApiObject> {
 
     public abstract List<? extends PartialBotApiMethod<?>> execute(@NotNull final T payload);
 
-    public abstract BotCommand getCommand();
+    public abstract UserCommand getCommand();
 }

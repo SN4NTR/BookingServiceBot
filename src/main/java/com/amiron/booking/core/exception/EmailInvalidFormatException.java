@@ -1,4 +1,4 @@
-package com.amiron.booking.bot.exception;
+package com.amiron.booking.core.exception;
 
 import com.amiron.booking.core.property.LocalizedMessage;
 

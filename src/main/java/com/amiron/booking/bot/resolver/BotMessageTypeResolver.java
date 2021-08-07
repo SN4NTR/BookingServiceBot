@@ -1,4 +1,4 @@
-package com.amiron.booking.bot.service;
+package com.amiron.booking.bot.resolver;
 
 import com.amiron.booking.bot.model.MessageType;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import static com.amiron.booking.bot.model.MessageType.UNKNOWN;
  */
 @Validated
 @Component
-public class MessageTypeResolver {
+public class BotMessageTypeResolver {
 
     public MessageType resolve(final PartialBotApiMethod<?> message) {
         if (message instanceof BotApiMethod) {

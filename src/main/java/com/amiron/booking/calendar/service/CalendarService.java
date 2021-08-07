@@ -1,6 +1,8 @@
 package com.amiron.booking.calendar.service;
 
+import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.TimePeriod;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -10,5 +12,9 @@ import java.util.List;
  */
 public interface CalendarService {
 
-    List<Event> getUserEvents(@NotNull final String userEmail);
+    List<Event> getUserEvents(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to);
+
+    List<TimePeriod> getUserBusyTime(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to);
+
+    List<Event> getFreeUserEvents(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to);
 }

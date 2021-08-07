@@ -1,7 +1,9 @@
-package com.amiron.booking.bot.command;
+package com.amiron.booking.bot.resolver;
 
+import com.amiron.booking.bot.command.BotCommand;
+import com.amiron.booking.bot.command.CommandsContextHolder;
 import com.amiron.booking.bot.exception.CommandDoesNotExistException;
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -15,11 +17,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Validated
 @Service
-public class CommandResolver<T extends BotApiObject> {
+public class BotCommandResolver<T extends BotApiObject> {
 
     private final CommandsContextHolder<T> commandsContextHolder;
 
-    public Command<T> resolve(@NotNull final BotCommand botCommand) {
-        return commandsContextHolder.findByCommand(botCommand).orElseThrow(CommandDoesNotExistException::new);
+    public BotCommand<T> resolve(@NotNull final UserCommand userCommand) {
+        return commandsContextHolder.findByCommand(userCommand).orElseThrow(CommandDoesNotExistException::new);
     }
 }

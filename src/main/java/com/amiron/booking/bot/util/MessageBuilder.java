@@ -12,12 +12,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import static com.amiron.booking.bot.model.BotCommand.ACCOUNT;
-import static com.amiron.booking.bot.model.BotCommand.BOOKINGS;
-import static com.amiron.booking.bot.model.BotCommand.BOOK_SERVICE;
+import static com.amiron.booking.bot.model.UserCommand.ACCOUNT;
+import static com.amiron.booking.bot.model.UserCommand.BOOKINGS;
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_SERVICES;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static lombok.AccessLevel.PRIVATE;
+import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWNV2;
 
 /**
  * @author Aliaksandr Miron
@@ -32,7 +33,7 @@ public class MessageBuilder {
         final SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(text);
-        sendMessage.enableHtml(true);
+        sendMessage.setParseMode(MARKDOWNV2);
         sendMessage.setReplyMarkup(replyKeyboard);
         return sendMessage;
     }
@@ -58,7 +59,7 @@ public class MessageBuilder {
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-        editMessageText.enableHtml(true);
+        editMessageText.setParseMode(MARKDOWNV2);
         return editMessageText;
     }
 
@@ -70,17 +71,17 @@ public class MessageBuilder {
 
     private static InlineKeyboardMarkup buildKeyboardMarkup() {
         final InlineKeyboardButton accountButton = buildInlineKeyboardButton("Account", ACCOUNT.getOriginValue());
-        final InlineKeyboardButton bookServiceButton = buildInlineKeyboardButton("Book Service", BOOK_SERVICE.getOriginValue());
+        final InlineKeyboardButton bookServiceButton = buildInlineKeyboardButton("Book Service", CHOOSE_SERVICES.getOriginValue());
         final InlineKeyboardButton bookingsButton = buildInlineKeyboardButton("Bookings", BOOKINGS.getOriginValue());
         return buildInlineKeyboardMarkupWithButtonsFromNewLine(accountButton, bookServiceButton, bookingsButton);
     }
 
     private static String buildMenuText() {
-        return "This menu is used to check your account settings and existing bookings. " +
-                "Click provided buttons for required actions.\n\n" +
-                "<b>Menu</b>\n" +
-                "Account - check your account info\n" +
-                "Book Service - book required service\n" +
-                "Bookings - check your existing bookings\n";
+        return "This menu is used to check your account settings and existing bookings\\. " +
+                "Click provided buttons for required actions\\.\n\n" +
+                "*Menu*\n" +
+                "__Account__ \\- check your account info\n" +
+                "__Book Service__ \\- book required service\n" +
+                "__Bookings__ \\- check your existing bookings\n";
     }
 }

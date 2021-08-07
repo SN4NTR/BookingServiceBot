@@ -1,5 +1,6 @@
 package com.amiron.booking.master.model;
 
+import com.amiron.booking.servicebooking.model.Booking;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -39,4 +42,7 @@ public class Master {
     @Lob
     @Column(name = "photo")
     private byte[] photo;
+
+    @OneToMany(mappedBy = "master")
+    private List<Booking> bookings;
 }

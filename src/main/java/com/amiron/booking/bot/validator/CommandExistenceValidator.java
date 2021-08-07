@@ -1,7 +1,7 @@
 package com.amiron.booking.bot.validator;
 
 import com.amiron.booking.bot.exception.CommandDoesNotExistException;
-import com.amiron.booking.bot.model.BotCommand;
+import com.amiron.booking.bot.model.UserCommand;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -17,7 +17,7 @@ public class CommandExistenceValidator {
     }
 
     private void throwIfDoesNotExist(final String command) {
-        if (BotCommand.doesNotContainValue(command)) {
+        if (UserCommand.doesNotContainValue(command)) {
             throw new CommandDoesNotExistException();
         }
     }

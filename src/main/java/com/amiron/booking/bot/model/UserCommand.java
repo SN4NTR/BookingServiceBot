@@ -8,7 +8,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 /**
  * @author Aliaksandr Miron
  */
-public enum BotCommand {
+public enum UserCommand {
 
     START("/start"),
     MENU("/menu"),
@@ -18,25 +18,27 @@ public enum BotCommand {
     CHANGE_EMAIL("/account/changeEmail"),
     SET_PHONE_NUMBER("/account/setPhoneNumber"),
     CHANGE_PHONE_NUMBER("/account/changePhoneNumber"),
-    BOOK_SERVICE("/bookService"),
-    BOOK_NAILS("/bookNails"),
-    BOOK_MASTER("/bookMaster/%s"),
+    CHOOSE_SERVICES("/services"),
+    CHOOSE_NAILS("/services?name=chooseNails"),
+    CHOOSE_MASTER("/masters/%s"),
+    CHOOSE_MONTH("/masters/%s/calendars?day=%s&month=%s&year=%s"),
+    CHOOSE_DAY("/masters/%s/calendars/%s/day?day=%s&month=%s&year=%s"),
     UNKNOWN("unknown");
 
     private final String value;
 
-    BotCommand(final String value) {
+    UserCommand(final String value) {
         this.value = value;
     }
 
-    public static Optional<BotCommand> findByValue(final String value) {
-        return Arrays.stream(BotCommand.values())
+    public static Optional<UserCommand> findByValue(final String value) {
+        return Arrays.stream(UserCommand.values())
                 .filter(command -> command.getFormattedValue().equals(value))
                 .findFirst();
     }
 
     public static boolean containsValue(final String value) {
-        return Arrays.stream(BotCommand.values())
+        return Arrays.stream(UserCommand.values())
                 .anyMatch(command -> command.getFormattedValue().equals(value));
     }
 
@@ -49,9 +51,8 @@ public enum BotCommand {
     }
 
     public String getFormattedValue() {
-        if (value.contains("/%s")) {
-            return value.replace("/%s", EMPTY);
-        }
-        return value;
+        return value.contains("/%s")
+                ? value.replace("/%s", EMPTY)
+                : value;
     }
 }

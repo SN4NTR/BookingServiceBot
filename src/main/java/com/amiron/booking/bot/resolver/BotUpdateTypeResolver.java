@@ -1,4 +1,4 @@
-package com.amiron.booking.bot.service;
+package com.amiron.booking.bot.resolver;
 
 import com.amiron.booking.bot.model.BotUpdateType;
 import org.springframework.stereotype.Component;
