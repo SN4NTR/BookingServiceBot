@@ -70,7 +70,7 @@ public class ChooseNailsBotCommand extends BotCommand<CallbackQuery> {
         final byte[] masterPhoto = master.getPhoto();
         final String masterId = master.getId().toString();
 
-        final InlineKeyboardMarkup keyboardMarkup = buildInlineKeyboardMarkup("Book master", format(CHOOSE_MASTER.getOriginValue(), masterId));
+        final InlineKeyboardMarkup keyboardMarkup = buildInlineKeyboardMarkup("Book master", format(CHOOSE_MASTER.getPatternTemplate(), masterId));
         final SendPhoto photoMessage = buildSendPhotoMessage(chatId, masterPhoto, masterInfoText);
         photoMessage.setReplyMarkup(keyboardMarkup);
 

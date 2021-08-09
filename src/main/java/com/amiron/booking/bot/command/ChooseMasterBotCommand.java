@@ -22,7 +22,8 @@ import java.util.UUID;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MASTER;
 import static com.amiron.booking.bot.util.CommandUtils.getUuidFromCommand;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildCalendarKeyboardMarkupForCurrentMonth;
-import static com.amiron.booking.master.util.MasterCalendarUtils.updateKeyboardMarkupWithFreeDates;
+import static com.amiron.booking.master.util.MasterCalendarUtils.updateKeyboardMarkupWithMasterEmail;
+import static com.amiron.booking.master.util.MasterCalendarUtils.updateKeyboardMarkupWithMasterFreeDates;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Collections.singletonList;
 
@@ -42,11 +43,7 @@ public class ChooseMasterBotCommand extends BotCommand<CallbackQuery> {
         final Long chatId = callbackQuery.getMessage().getChatId();
         final String callbackText = callbackQuery.getData();
         final UUID masterId = getUuidFromCommand(callbackText);
-
-        final Master master = masterService.getById(masterId);
-        final String masterEmail = master.getEmail();
-
-        return buildResponseMessage(chatId, masterEmail);
+        return buildResponseMessage(chatId, masterId);
     }
 
     @Override
@@ -54,8 +51,8 @@ public class ChooseMasterBotCommand extends BotCommand<CallbackQuery> {
         return CHOOSE_MASTER;
     }
 
-    private List<SendMessage> buildResponseMessage(final Long chatId, final String masterEmail) {
-        final InlineKeyboardMarkup calendarKeyboardMarkup = buildCalendarKeyboardMarkup(masterEmail);
+    private List<SendMessage> buildResponseMessage(final Long chatId, final UUID masterId) {
+        final InlineKeyboardMarkup calendarKeyboardMarkup = buildCalendarKeyboardMarkup(masterId);
         final SendMessage message = new SendMessage();
         message.setReplyMarkup(calendarKeyboardMarkup);
         message.setText("Please choose a day:");
@@ -63,13 +60,16 @@ public class ChooseMasterBotCommand extends BotCommand<CallbackQuery> {
         return singletonList(message);
     }
 
-    private InlineKeyboardMarkup buildCalendarKeyboardMarkup(final String masterEmail) {
+    private InlineKeyboardMarkup buildCalendarKeyboardMarkup(final UUID masterId) {
+        final Master master = masterService.getById(masterId);
+        final String masterEmail = master.getEmail();
         final DateTime from = new DateTime(Instant.now().toEpochMilli());
         final DateTime to = new DateTime(Instant.now().plus(31, DAYS).toEpochMilli());
         final List<Event> freeMasterBookings = calendarService.getFreeUserEvents(masterEmail, from, to);
 
         final InlineKeyboardMarkup calendarKeyboard = buildCalendarKeyboardMarkupForCurrentMonth();
-        updateKeyboardMarkupWithFreeDates(calendarKeyboard, freeMasterBookings);
+        updateKeyboardMarkupWithMasterFreeDates(calendarKeyboard, freeMasterBookings);
+        updateKeyboardMarkupWithMasterEmail(calendarKeyboard, masterEmail);
         return calendarKeyboard;
     }
 }

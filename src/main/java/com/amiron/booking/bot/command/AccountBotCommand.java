@@ -58,8 +58,8 @@ public class AccountBotCommand extends BotCommand<CallbackQuery> {
     }
 
     private InlineKeyboardMarkup buildKeyboardMarkup() {
-        final InlineKeyboardButton accountButton = buildInlineKeyboardButton("Change phone number", CHANGE_PHONE_NUMBER.getOriginValue());
-        final InlineKeyboardButton bookingsButton = buildInlineKeyboardButton("Change email", CHANGE_EMAIL.getOriginValue());
+        final InlineKeyboardButton accountButton = buildInlineKeyboardButton("Change phone number", CHANGE_PHONE_NUMBER.getPatternTemplate());
+        final InlineKeyboardButton bookingsButton = buildInlineKeyboardButton("Change email", CHANGE_EMAIL.getPatternTemplate());
         return buildInlineKeyboardMarkupWithButtonsFromNewLine(accountButton, bookingsButton);
     }
 
@@ -69,7 +69,7 @@ public class AccountBotCommand extends BotCommand<CallbackQuery> {
                         "First Name: %s\n" +
                         "Last Name: %s\n" +
                         "Email: %s\n" +
-                        "Phone Number: +%s",
+                        "Phone Number: \\+%s",
                 client.getFirstName(),
                 client.getLastName(),
                 client.getEmail(),

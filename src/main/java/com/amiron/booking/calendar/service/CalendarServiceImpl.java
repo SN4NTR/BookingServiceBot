@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.List;
 
+import static com.amiron.booking.calendar.util.CalendarUtils.getDayOfMonthFromDate;
+import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
@@ -67,6 +70,32 @@ public class CalendarServiceImpl implements CalendarService {
         final List<Event> userAllEvents = getUserEvents(userEmail, from, to);
         final List<TimePeriod> userBusyTimePeriods = getUserBusyTime(userEmail, from, to);
         return findFreeUserEvents(userAllEvents, userBusyTimePeriods);
+    }
+
+    @Override
+    public List<Event> getFreeUserDayEvents(@NotNull final String userEmail, @NotNull final DateTime dateTime) {
+        final DateTime nextDay = plusDays(dateTime, 1);
+        final List<Event> freeUserDayEvents = getFreeUserEvents(userEmail, dateTime, nextDay);
+        return filterOutNextDayEvents(freeUserDayEvents, dateTime);
+    }
+
+    private DateTime plusDays(final DateTime dateTime, final int days) {
+        final long dateTimeValue = dateTime.getValue();
+        final Instant instant = Instant.ofEpochMilli(dateTimeValue);
+        return new DateTime(instant.plus(days, DAYS).toEpochMilli());
+    }
+
+    private List<Event> filterOutNextDayEvents(final List<Event> events, final DateTime dateTime) {
+        return events.stream()
+                .filter(event -> isCurrentDayEvent(event, dateTime))
+                .collect(toList());
+    }
+
+    private boolean isCurrentDayEvent(final Event event, final DateTime dateTime) {
+        final DateTime eventsStartDateTime = event.getStart().getDateTime();
+        final int dayOfMonthFromDate = getDayOfMonthFromDate(dateTime);
+        final int eventsDayOfMonth = getDayOfMonthFromDate(eventsStartDateTime);
+        return dayOfMonthFromDate == eventsDayOfMonth;
     }
 
     private List<Event> findFreeUserEvents(final List<Event> userEvents, final List<TimePeriod> userBusyTimePeriods) {

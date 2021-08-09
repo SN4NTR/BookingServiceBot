@@ -70,9 +70,9 @@ public class MessageBuilder {
     }
 
     private static InlineKeyboardMarkup buildKeyboardMarkup() {
-        final InlineKeyboardButton accountButton = buildInlineKeyboardButton("Account", ACCOUNT.getOriginValue());
-        final InlineKeyboardButton bookServiceButton = buildInlineKeyboardButton("Book Service", CHOOSE_SERVICES.getOriginValue());
-        final InlineKeyboardButton bookingsButton = buildInlineKeyboardButton("Bookings", BOOKINGS.getOriginValue());
+        final InlineKeyboardButton accountButton = buildInlineKeyboardButton("Account", ACCOUNT.getPatternTemplate());
+        final InlineKeyboardButton bookServiceButton = buildInlineKeyboardButton("Book Service", CHOOSE_SERVICES.getPatternTemplate());
+        final InlineKeyboardButton bookingsButton = buildInlineKeyboardButton("Bookings", BOOKINGS.getPatternTemplate());
         return buildInlineKeyboardMarkupWithButtonsFromNewLine(accountButton, bookServiceButton, bookingsButton);
     }
 

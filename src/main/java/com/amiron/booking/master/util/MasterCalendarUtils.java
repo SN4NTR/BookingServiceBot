@@ -19,11 +19,28 @@ import static org.apache.commons.lang3.StringUtils.isNumeric;
 @NoArgsConstructor(access = PRIVATE)
 public class MasterCalendarUtils {
 
-    public static InlineKeyboardMarkup updateKeyboardMarkupWithFreeDates(
+    public static InlineKeyboardMarkup updateKeyboardMarkupWithMasterFreeDates(
             final InlineKeyboardMarkup calendarKeyboard, final List<Event> freeMasterBookings) {
         final List<List<InlineKeyboardButton>> buttons = calendarKeyboard.getKeyboard();
         buttons.forEach(rowButtons -> updateButtonsText(rowButtons, freeMasterBookings));
         return calendarKeyboard;
+    }
+
+    public static InlineKeyboardMarkup updateKeyboardMarkupWithMasterEmail(
+            final InlineKeyboardMarkup calendarKeyboard, final String email) {
+        final List<List<InlineKeyboardButton>> buttons = calendarKeyboard.getKeyboard();
+        buttons.forEach(rowButtons -> updateButtonsCallbackData(rowButtons, email));
+        return calendarKeyboard;
+    }
+
+    private static void updateButtonsCallbackData(final List<InlineKeyboardButton> rowButtons, final String email) {
+        rowButtons.forEach(button -> setEmailInCallbackData(button, email));
+    }
+
+    private static void setEmailInCallbackData(final InlineKeyboardButton button, final String email) {
+        final String callbackData = button.getCallbackData();
+        final String formattedCallbackData = String.format(callbackData, email);
+        button.setCallbackData(formattedCallbackData);
     }
 
     private static void updateButtonsText(

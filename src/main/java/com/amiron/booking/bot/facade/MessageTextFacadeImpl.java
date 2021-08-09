@@ -1,6 +1,7 @@
 package com.amiron.booking.bot.facade;
 
 import com.amiron.booking.bot.command.BotCommand;
+import com.amiron.booking.bot.exception.CommandDoesNotExistException;
 import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.bot.resolver.BotCommandResolver;
 import com.amiron.booking.bot.resolver.UserCommandResolver;
@@ -31,7 +32,7 @@ public class MessageTextFacadeImpl implements MessageTextFacade {
         messageTextGenericValidator.validate(message);
 
         final String messageText = message.getText();
-        final UserCommand userCommand = userCommandResolver.resolveByMessageText(messageText);
+        final UserCommand userCommand = userCommandResolver.resolveByMessageText(messageText).orElseThrow(CommandDoesNotExistException::new);
         final BotCommand<Message> botCommand = botCommandResolver.resolve(userCommand);
 
         return botCommand.execute(message);

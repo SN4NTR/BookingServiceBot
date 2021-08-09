@@ -17,4 +17,6 @@ public interface CalendarService {
     List<TimePeriod> getUserBusyTime(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to);
 
     List<Event> getFreeUserEvents(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to);
+
+    List<Event> getFreeUserDayEvents(@NotNull final String userEmail, @NotNull final DateTime dateTime);
 }

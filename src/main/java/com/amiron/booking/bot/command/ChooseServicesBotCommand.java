@@ -24,7 +24,7 @@ import static java.util.Collections.singletonList;
  */
 @Validated
 @Component
-public class ChooseServiceBotCommand extends BotCommand<CallbackQuery> {
+public class ChooseServicesBotCommand extends BotCommand<CallbackQuery> {
 
     @Override
     public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
@@ -46,7 +46,7 @@ public class ChooseServiceBotCommand extends BotCommand<CallbackQuery> {
     }
 
     private InlineKeyboardMarkup buildKeyboardMarkup() {
-        final InlineKeyboardButton bookNailsButton = buildInlineKeyboardButton("Book nails", CHOOSE_NAILS.getOriginValue());
+        final InlineKeyboardButton bookNailsButton = buildInlineKeyboardButton("Book nails", CHOOSE_NAILS.getPatternTemplate());
         return buildInlineKeyboardMarkupWithButtonsFromNewLine(bookNailsButton);
     }
 }

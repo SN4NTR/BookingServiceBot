@@ -1,5 +1,7 @@
 package com.amiron.booking.bot.util;
 
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.Event;
 import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -9,11 +11,17 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_DAY;
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MONTH;
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_TIME;
+import static com.amiron.booking.calendar.util.CalendarUtils.getLocalDateTimeFromDateTime;
+import static com.amiron.booking.calendar.util.CalendarUtils.getTimeAsStringFromDate;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -91,14 +99,46 @@ public class KeyboardBuilder {
         return buildKeyboardMarkup(date);
     }
 
+    public static InlineKeyboardMarkup buildCalendarKeyboardMarkupForDay(final List<Event> masterDayBookings) {
+        final InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        final List<List<InlineKeyboardButton>> buttons = buildKeyboardButtonsLinesForDay(masterDayBookings);
+        keyboardMarkup.setKeyboard(buttons);
+        return keyboardMarkup;
+    }
+
+    private static List<List<InlineKeyboardButton>> buildKeyboardButtonsLinesForDay(final List<Event> masterDayBookings) {
+        final List<InlineKeyboardButton> buttonsRows = masterDayBookings.stream()
+                .map(KeyboardBuilder::buildTimeButton)
+                .collect(Collectors.toList());
+        return List.of(buttonsRows);
+    }
+
+    private static InlineKeyboardButton buildTimeButton(final Event booking) {
+        final DateTime startDateTime = booking.getStart().getDateTime();
+        final DateTime endDateTime = booking.getEnd().getDateTime();
+        final String startTime = getTimeAsStringFromDate(startDateTime);
+        final String endTime = getTimeAsStringFromDate(endDateTime);
+        final LocalDateTime bookingLocalDateTime = getLocalDateTimeFromDateTime(startDateTime);
+        final int dayOfMonth = bookingLocalDateTime.getDayOfMonth();
+        final int month = bookingLocalDateTime.getMonth().getValue();
+        final int year = bookingLocalDateTime.getYear();
+        final int hours = bookingLocalDateTime.getHour();
+        final int minutes = bookingLocalDateTime.getMinute();
+
+        final InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(format("%s-%s", startTime, endTime));
+        button.setCallbackData(format(CHOOSE_TIME.getPatternTemplate(), "%s", dayOfMonth, month, year, hours, minutes));
+        return button;
+    }
+
     private static InlineKeyboardMarkup buildKeyboardMarkup(final LocalDate date) {
         final InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        final List<List<InlineKeyboardButton>> buttonsLines = buildKeyboardButtonsLines(date);
+        final List<List<InlineKeyboardButton>> buttonsLines = buildKeyboardButtonsRowsForMonth(date);
         keyboardMarkup.setKeyboard(buttonsLines);
         return keyboardMarkup;
     }
 
-    private static List<List<InlineKeyboardButton>> buildKeyboardButtonsLines(final LocalDate date) {
+    private static List<List<InlineKeyboardButton>> buildKeyboardButtonsRowsForMonth(final LocalDate date) {
         final List<InlineKeyboardButton> monthNavigationButtons = buildMonthNavigationButtons(date);
         final List<InlineKeyboardButton> daysOfWeekButtons = buildDaysOfWeekButtons();
         final List<List<InlineKeyboardButton>> buttons = buildDaysButtons(date);
@@ -120,7 +160,7 @@ public class KeyboardBuilder {
         final int dayOfMonth = date.getDayOfMonth();
         final int year = date.getYear();
 
-        final String callbackData = format("/calendar/%s-%s-%s", dayOfMonth, previousMonthValue, year);
+        final String callbackData = format(CHOOSE_MONTH.getPatternTemplate(), "%s", dayOfMonth, previousMonthValue, year);
         final InlineKeyboardButton previousMonthButton = new InlineKeyboardButton("<");
         previousMonthButton.setCallbackData(callbackData);
         return previousMonthButton;
@@ -141,7 +181,7 @@ public class KeyboardBuilder {
         final int dayOfMonth = date.getDayOfMonth();
         final int year = date.getYear();
 
-        final String callbackData = format("/calendar/%s-%s-%s", dayOfMonth, nextMonthValue, year);
+        final String callbackData = format(CHOOSE_MONTH.getPatternTemplate(), "%s", dayOfMonth, nextMonthValue, year);
         final InlineKeyboardButton nextMonthButton = new InlineKeyboardButton(">");
         nextMonthButton.setCallbackData(callbackData);
         return nextMonthButton;
@@ -195,7 +235,7 @@ public class KeyboardBuilder {
         final int month = date.getMonthValue();
         final int year = date.getYear();
         final InlineKeyboardButton button = new InlineKeyboardButton(String.valueOf(dayOfMonth));
-        button.setCallbackData(format("/bookMaster/{id}/date/%s-%s-%s", dayOfMonth, month, year));
+        button.setCallbackData(format(CHOOSE_DAY.getPatternTemplate(), "%s", dayOfMonth, month, year));
         return button;
     }
 
