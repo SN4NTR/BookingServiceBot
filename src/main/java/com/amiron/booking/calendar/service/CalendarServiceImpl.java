@@ -15,11 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
 import java.util.List;
 
+import static com.amiron.booking.calendar.util.CalendarUtils.addDaysToDateTime;
 import static com.amiron.booking.calendar.util.CalendarUtils.getDayOfMonthFromDate;
-import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
@@ -74,15 +73,9 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Override
     public List<Event> getFreeUserDayEvents(@NotNull final String userEmail, @NotNull final DateTime dateTime) {
-        final DateTime nextDay = plusDays(dateTime, 1);
+        final DateTime nextDay = addDaysToDateTime(dateTime, 1);
         final List<Event> freeUserDayEvents = getFreeUserEvents(userEmail, dateTime, nextDay);
         return filterOutNextDayEvents(freeUserDayEvents, dateTime);
-    }
-
-    private DateTime plusDays(final DateTime dateTime, final int days) {
-        final long dateTimeValue = dateTime.getValue();
-        final Instant instant = Instant.ofEpochMilli(dateTimeValue);
-        return new DateTime(instant.plus(days, DAYS).toEpochMilli());
     }
 
     private List<Event> filterOutNextDayEvents(final List<Event> events, final DateTime dateTime) {

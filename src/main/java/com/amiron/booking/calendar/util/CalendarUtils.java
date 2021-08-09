@@ -11,6 +11,7 @@ import java.time.ZoneId;
 
 import static java.lang.String.format;
 import static java.time.OffsetDateTime.now;
+import static java.time.temporal.ChronoUnit.DAYS;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -44,7 +45,13 @@ public class CalendarUtils {
         return format("%s:" + minutesFormat, hours, minutes);
     }
 
-    private static LocalDate getLocalDateFromDateTime(final DateTime dateTime) {
+    public static DateTime addDaysToDateTime(final DateTime dateTime, final int days) {
+        final long dateTimeValue = dateTime.getValue();
+        final Instant instant = Instant.ofEpochMilli(dateTimeValue);
+        return new DateTime(instant.plus(days, DAYS).toEpochMilli());
+    }
+
+    public static LocalDate getLocalDateFromDateTime(final DateTime dateTime) {
         final long dateTimeValue = dateTime.getValue();
         final Instant instant = Instant.ofEpochMilli(dateTimeValue);
         return LocalDate.ofInstant(instant, ZoneId.systemDefault());

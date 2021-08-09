@@ -155,10 +155,16 @@ public class KeyboardBuilder {
     }
 
     private static InlineKeyboardButton buildPreviousMonthButton(final LocalDate date) {
+        final LocalDate now = LocalDate.now();
+        final int currentYear = now.getYear();
+        final int currentMonth = now.getMonth().getValue();
+
         final Month month = date.getMonth();
         final int previousMonthValue = month.minus(1).getValue();
-        final int dayOfMonth = date.getDayOfMonth();
         final int year = date.getYear();
+        final int dayOfMonth = currentYear == year && currentMonth == previousMonthValue
+                ? now.getDayOfMonth()
+                : 1;
 
         final String callbackData = format(CHOOSE_MONTH.getPatternTemplate(), "%s", dayOfMonth, previousMonthValue, year);
         final InlineKeyboardButton previousMonthButton = new InlineKeyboardButton("<");
@@ -176,10 +182,16 @@ public class KeyboardBuilder {
     }
 
     private static InlineKeyboardButton buildNextMonthButton(final LocalDate date) {
+        final LocalDate now = LocalDate.now();
+        final int currentYear = now.getYear();
+        final int currentMonth = now.getMonth().getValue();
+
         final Month month = date.getMonth();
         final int nextMonthValue = month.plus(1).getValue();
-        final int dayOfMonth = date.getDayOfMonth();
-        final int year = date.getYear();
+        final int year = date.getYear(); // TODO fix problem with year is changed
+        final int dayOfMonth = currentYear == year && currentMonth == nextMonthValue
+                ? now.getDayOfMonth()
+                : 1;
 
         final String callbackData = format(CHOOSE_MONTH.getPatternTemplate(), "%s", dayOfMonth, nextMonthValue, year);
         final InlineKeyboardButton nextMonthButton = new InlineKeyboardButton(">");

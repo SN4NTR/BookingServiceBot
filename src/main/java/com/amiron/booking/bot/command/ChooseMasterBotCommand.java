@@ -68,7 +68,7 @@ public class ChooseMasterBotCommand extends BotCommand<CallbackQuery> {
         final List<Event> freeMasterBookings = calendarService.getFreeUserEvents(masterEmail, from, to);
 
         final InlineKeyboardMarkup calendarKeyboard = buildCalendarKeyboardMarkupForCurrentMonth();
-        updateKeyboardMarkupWithMasterFreeDates(calendarKeyboard, freeMasterBookings);
+        updateKeyboardMarkupWithMasterFreeDates(calendarKeyboard, from, freeMasterBookings);
         updateKeyboardMarkupWithMasterEmail(calendarKeyboard, masterEmail);
         return calendarKeyboard;
     }
