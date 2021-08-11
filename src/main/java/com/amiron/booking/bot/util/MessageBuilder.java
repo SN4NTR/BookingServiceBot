@@ -13,8 +13,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import static com.amiron.booking.bot.model.UserCommand.ACCOUNT;
-import static com.amiron.booking.bot.model.UserCommand.BOOKINGS;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_SERVICES;
+import static com.amiron.booking.bot.model.UserCommand.GET_BOOKINGS;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static lombok.AccessLevel.PRIVATE;
@@ -72,7 +72,7 @@ public class MessageBuilder {
     private static InlineKeyboardMarkup buildKeyboardMarkup() {
         final InlineKeyboardButton accountButton = buildInlineKeyboardButton("Account", ACCOUNT.getPatternTemplate());
         final InlineKeyboardButton bookServiceButton = buildInlineKeyboardButton("Book Service", CHOOSE_SERVICES.getPatternTemplate());
-        final InlineKeyboardButton bookingsButton = buildInlineKeyboardButton("Bookings", BOOKINGS.getPatternTemplate());
+        final InlineKeyboardButton bookingsButton = buildInlineKeyboardButton("Bookings", GET_BOOKINGS.getPatternTemplate());
         return buildInlineKeyboardMarkupWithButtonsFromNewLine(accountButton, bookServiceButton, bookingsButton);
     }
 

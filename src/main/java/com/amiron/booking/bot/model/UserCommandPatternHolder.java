@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static com.amiron.booking.bot.model.UserCommand.ACCOUNT;
-import static com.amiron.booking.bot.model.UserCommand.BOOKINGS;
 import static com.amiron.booking.bot.model.UserCommand.BOOK_TIME;
+import static com.amiron.booking.bot.model.UserCommand.CANCEL_BOOKING;
 import static com.amiron.booking.bot.model.UserCommand.CHANGE_EMAIL;
 import static com.amiron.booking.bot.model.UserCommand.CHANGE_PHONE_NUMBER;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_DAY;
@@ -18,6 +18,7 @@ import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MONTH;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_NAILS;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_SERVICES;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_TIME;
+import static com.amiron.booking.bot.model.UserCommand.GET_BOOKINGS;
 import static com.amiron.booking.bot.model.UserCommand.MENU;
 import static com.amiron.booking.bot.model.UserCommand.SET_EMAIL;
 import static com.amiron.booking.bot.model.UserCommand.SET_PHONE_NUMBER;
@@ -41,14 +42,12 @@ public class UserCommandPatternHolder {
 
     public static final Map<UserCommand, Pattern> USER_COMMANDS_PATTERNS = new EnumMap<>(UserCommand.class);
 
-    private static final String OPEN_BRACKET = "(";
-    private static final String CLOSE_BRACKET = ")";
-
     static {
         USER_COMMANDS_PATTERNS.put(START, compile(START.getPatternTemplate()));
         USER_COMMANDS_PATTERNS.put(MENU, compile(MENU.getPatternTemplate()));
         USER_COMMANDS_PATTERNS.put(ACCOUNT, compile(ACCOUNT.getPatternTemplate()));
-        USER_COMMANDS_PATTERNS.put(BOOKINGS, compile(BOOKINGS.getPatternTemplate()));
+        USER_COMMANDS_PATTERNS.put(GET_BOOKINGS, compile(GET_BOOKINGS.getPatternTemplate()));
+        USER_COMMANDS_PATTERNS.put(CANCEL_BOOKING, compile(format(CANCEL_BOOKING.getPatternTemplate(), UUID_PATTERN)));
         USER_COMMANDS_PATTERNS.put(SET_EMAIL, compile(SET_EMAIL.getPatternTemplate()));
         USER_COMMANDS_PATTERNS.put(CHANGE_EMAIL, compile(CHANGE_EMAIL.getPatternTemplate()));
         USER_COMMANDS_PATTERNS.put(SET_PHONE_NUMBER, compile(SET_PHONE_NUMBER.getPatternTemplate()));

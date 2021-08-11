@@ -66,7 +66,7 @@ public class AccountBotCommand extends BotCommand<CallbackQuery> {
     // TODO replace with message builder
     private String buildAccountText(final Client client) {
         return format("""
-                        *Account*
+                        <b>Account</b>
                         First Name: %s
                         Last Name: %s
                         Email: %s

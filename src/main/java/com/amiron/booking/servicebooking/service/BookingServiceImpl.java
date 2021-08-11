@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Aliaksandr Miron
@@ -25,7 +26,17 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<Booking> getAllByClientUsername(@NotNull final String clientUsername) {
+        return bookingRepository.findByClientUsername(clientUsername);
+    }
+
+    @Override
     public List<Booking> getAll() {
         return bookingRepository.findAll();
+    }
+
+    @Override
+    public void delete(@NotNull final UUID id) {
+        bookingRepository.deleteById(id);
     }
 }
