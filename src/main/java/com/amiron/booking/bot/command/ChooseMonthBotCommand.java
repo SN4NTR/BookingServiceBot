@@ -1,8 +1,8 @@
 package com.amiron.booking.bot.command;
 
 import com.amiron.booking.bot.model.UserCommand;
+import com.amiron.booking.bot.util.MessageBuilder;
 import com.amiron.booking.calendar.service.CalendarService;
-import com.amiron.booking.master.service.MasterService;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import lombok.AllArgsConstructor;
@@ -39,7 +39,6 @@ import static java.util.Collections.singletonList;
 @Component
 public class ChooseMonthBotCommand extends BotCommand<CallbackQuery> {
 
-    private final MasterService masterService;
     private final CalendarService calendarService;
 
     @Override
@@ -53,18 +52,14 @@ public class ChooseMonthBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return CHOOSE_MONTH;
     }
 
     private List<EditMessageText> buildResponseMessage(
             final Long chatId, final Integer messageId, final String callbackText, final String masterEmail) {
         final InlineKeyboardMarkup calendarKeyboardMarkup = buildCalendarKeyboardMarkup(callbackText, masterEmail);
-        final EditMessageText message = new EditMessageText();
-        message.setMessageId(messageId);
-        message.setReplyMarkup(calendarKeyboardMarkup);
-        message.setText("Please choose a day:");
-        message.setChatId(String.valueOf(chatId));
+        final EditMessageText message = MessageBuilder.buildEditedMessageText(chatId, messageId, "Please choose a day:", calendarKeyboardMarkup);
         return singletonList(message);
     }
 

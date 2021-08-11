@@ -22,6 +22,7 @@ import java.util.UUID;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MASTER;
 import static com.amiron.booking.bot.util.CommandUtils.getUuidFromCommand;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildCalendarKeyboardMarkupForCurrentMonth;
+import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static com.amiron.booking.master.util.MasterCalendarUtils.updateKeyboardMarkupWithMasterEmail;
 import static com.amiron.booking.master.util.MasterCalendarUtils.updateKeyboardMarkupWithMasterFreeDates;
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -47,16 +48,13 @@ public class ChooseMasterBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return CHOOSE_MASTER;
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId, final UUID masterId) {
         final InlineKeyboardMarkup calendarKeyboardMarkup = buildCalendarKeyboardMarkup(masterId);
-        final SendMessage message = new SendMessage();
-        message.setReplyMarkup(calendarKeyboardMarkup);
-        message.setText("Please choose a day:");
-        message.setChatId(String.valueOf(chatId));
+        final SendMessage message = buildSendMessage(chatId, "Please choose a day:", calendarKeyboardMarkup);
         return singletonList(message);
     }
 

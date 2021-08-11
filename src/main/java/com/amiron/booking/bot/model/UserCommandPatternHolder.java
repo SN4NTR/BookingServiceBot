@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import static com.amiron.booking.bot.model.UserCommand.ACCOUNT;
 import static com.amiron.booking.bot.model.UserCommand.BOOKINGS;
+import static com.amiron.booking.bot.model.UserCommand.BOOK_TIME;
 import static com.amiron.booking.bot.model.UserCommand.CHANGE_EMAIL;
 import static com.amiron.booking.bot.model.UserCommand.CHANGE_PHONE_NUMBER;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_DAY;
@@ -16,12 +17,15 @@ import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MASTER;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MONTH;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_NAILS;
 import static com.amiron.booking.bot.model.UserCommand.CHOOSE_SERVICES;
+import static com.amiron.booking.bot.model.UserCommand.CHOOSE_TIME;
 import static com.amiron.booking.bot.model.UserCommand.MENU;
 import static com.amiron.booking.bot.model.UserCommand.SET_EMAIL;
 import static com.amiron.booking.bot.model.UserCommand.SET_PHONE_NUMBER;
 import static com.amiron.booking.bot.model.UserCommand.START;
 import static com.amiron.booking.core.constant.RegexConstants.DAY_OF_MONTH_PATTERN;
 import static com.amiron.booking.core.constant.RegexConstants.EMAIL_PATTERN;
+import static com.amiron.booking.core.constant.RegexConstants.HOURS_PATTERN;
+import static com.amiron.booking.core.constant.RegexConstants.MINUTES_PATTERN;
 import static com.amiron.booking.core.constant.RegexConstants.MONTH_PATTERN;
 import static com.amiron.booking.core.constant.RegexConstants.UUID_PATTERN;
 import static com.amiron.booking.core.constant.RegexConstants.YEAR_PATTERN;
@@ -54,6 +58,8 @@ public class UserCommandPatternHolder {
         USER_COMMANDS_PATTERNS.put(CHOOSE_MASTER, compile(format(CHOOSE_MASTER.getPatternTemplate(), UUID_PATTERN)));
         USER_COMMANDS_PATTERNS.put(CHOOSE_MONTH, compile(format(CHOOSE_MONTH.getPatternTemplate(), EMAIL_PATTERN, DAY_OF_MONTH_PATTERN, MONTH_PATTERN, YEAR_PATTERN)));
         USER_COMMANDS_PATTERNS.put(CHOOSE_DAY, compile(format(CHOOSE_DAY.getPatternTemplate(), EMAIL_PATTERN, DAY_OF_MONTH_PATTERN, MONTH_PATTERN, YEAR_PATTERN)));
+        USER_COMMANDS_PATTERNS.put(CHOOSE_TIME, compile(format(CHOOSE_TIME.getPatternTemplate(), EMAIL_PATTERN, DAY_OF_MONTH_PATTERN, MONTH_PATTERN, YEAR_PATTERN, HOURS_PATTERN, MINUTES_PATTERN)));
+        USER_COMMANDS_PATTERNS.put(BOOK_TIME, compile(format(BOOK_TIME.getPatternTemplate(), EMAIL_PATTERN, DAY_OF_MONTH_PATTERN, MONTH_PATTERN, YEAR_PATTERN, HOURS_PATTERN, MINUTES_PATTERN)));
     }
 
     public static Optional<UserCommand> findCommandByTextCommand(final String textCommand) {

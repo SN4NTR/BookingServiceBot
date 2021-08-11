@@ -76,7 +76,7 @@ public class BotFacadeImpl implements BotFacade {
 
     private List<? extends PartialBotApiMethod<?>> processUnknownType(final Message message) {
         final Long chatId = message.getChatId();
-        final SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "Unknown command\\.");
+        final SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "Unknown command.");
         return singletonList(sendMessage);
     }
 }

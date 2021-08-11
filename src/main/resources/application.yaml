@@ -1,3 +1,7 @@
+service:
+  notification:
+    before-hours: ${SERVICE_NOTIFICATION_BEFORE_HOURS}
+
 bot:
   name: ${BOT_NAME}
   token: ${BOT_TOKEN}

@@ -51,7 +51,7 @@ public class ChooseNailsBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return CHOOSE_NAILS;
     }
 

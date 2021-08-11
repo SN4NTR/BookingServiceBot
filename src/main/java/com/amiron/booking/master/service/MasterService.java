@@ -14,4 +14,6 @@ public interface MasterService {
     List<Master> getAll();
 
     Master getById(@NotNull final UUID id);
+
+    Master getByEmail(@NotNull final String email);
 }

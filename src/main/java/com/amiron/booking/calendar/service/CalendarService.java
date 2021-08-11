@@ -12,11 +12,15 @@ import java.util.List;
  */
 public interface CalendarService {
 
-    List<Event> getUserEvents(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to);
+    List<Event> getUserEvents(@NotNull final String calendarId, @NotNull final DateTime from, @NotNull final DateTime to);
 
-    List<TimePeriod> getUserBusyTime(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to);
+    List<TimePeriod> getUserBusyTime(@NotNull final String calendarId, @NotNull final DateTime from, @NotNull final DateTime to);
 
-    List<Event> getFreeUserEvents(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to);
+    List<Event> getFreeUserEvents(@NotNull final String calendarId, @NotNull final DateTime from, @NotNull final DateTime to);
 
-    List<Event> getFreeUserDayEvents(@NotNull final String userEmail, @NotNull final DateTime dateTime);
+    List<Event> getFreeUserDayEvents(@NotNull final String calendarId, @NotNull final DateTime dateTime);
+
+    Event getByStartDateTime(@NotNull final String calendarId, @NotNull final DateTime dateTime);
+
+    void addGuestsToEvent(@NotNull final String calendarId, @NotNull final Event event, @NotNull final List<String> guestEmails);
 }

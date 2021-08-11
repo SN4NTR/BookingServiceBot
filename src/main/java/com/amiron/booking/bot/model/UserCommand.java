@@ -19,9 +19,10 @@ public enum UserCommand {
     CHOOSE_SERVICES("/services"),
     CHOOSE_NAILS("/services/nails"),
     CHOOSE_MASTER("/masters/%s"),
-    CHOOSE_MONTH("/month/email=%s&d=%s&m=%s&y=%s"),
-    CHOOSE_DAY("/day/email=%s&d=%s&m=%s&y=%s"),
-    CHOOSE_TIME("/time/email=%s&d=%s&m=%s&y=%s&h=&mm=%s");
+    CHOOSE_MONTH("/month/e=%s&d=%s&m=%s&y=%s"),
+    CHOOSE_DAY("/day/e=%s&d=%s&m=%s&y=%s"),
+    CHOOSE_TIME("/time/e=%s&d=%s&m=%s&y=%s&h=%s&mm=%s"),
+    BOOK_TIME("/book/e=%s&d=%s&m=%s&y=%s&h=%s&mm=%s");
 
     private final String patternTemplate;
 

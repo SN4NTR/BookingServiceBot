@@ -42,12 +42,12 @@ public class StartBotCommand extends BotCommand<Message> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return START;
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage message = buildSendMessage(chatId, "Welcome to Booking Bot\\!", null);
+        final SendMessage message = buildSendMessage(chatId, "Welcome to Booking Bot!", null);
         final SendMessage menuMessage = buildMenuMessage(chatId);
         return asList(message, menuMessage);
     }

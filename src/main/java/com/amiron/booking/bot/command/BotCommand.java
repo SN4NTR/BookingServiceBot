@@ -16,5 +16,5 @@ public abstract class BotCommand<T extends BotApiObject> {
 
     public abstract List<? extends PartialBotApiMethod<?>> execute(@NotNull final T payload);
 
-    public abstract UserCommand getCommand();
+    public abstract UserCommand getResponsibleForUserCommand();
 }

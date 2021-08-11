@@ -42,7 +42,7 @@ public class SetEmailBotCommand extends BotCommand<Message> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return SET_EMAIL;
     }
 
@@ -53,7 +53,7 @@ public class SetEmailBotCommand extends BotCommand<Message> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage sendMessage = buildSendMessage(chatId, "Email changed successfully\\!", null);
+        final SendMessage sendMessage = buildSendMessage(chatId, "Email changed successfully!", null);
         return singletonList(sendMessage);
     }
 }

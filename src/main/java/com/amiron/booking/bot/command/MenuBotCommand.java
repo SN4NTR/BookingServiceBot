@@ -29,7 +29,7 @@ public class MenuBotCommand extends BotCommand<Message> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return MENU;
     }
 }

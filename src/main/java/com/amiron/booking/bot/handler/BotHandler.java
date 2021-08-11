@@ -48,17 +48,15 @@ public class BotHandler extends TelegramLongPollingBot {
     }
 
     @SneakyThrows
-    private void sendMessages(final List<? extends PartialBotApiMethod<?>> messages) {
-        for (PartialBotApiMethod<?> message : messages) {
-            sendMessage(message);
-
-            Thread.sleep(DELAY_IN_MILLIS);
-        }
+    public void sendMessages(final List<? extends PartialBotApiMethod<?>> messages) {
+        messages.forEach(this::sendMessage);
     }
 
     // TODO correct photo sending (something with content)
     @SneakyThrows
-    private void sendMessage(final PartialBotApiMethod<?> message) {
+    public void sendMessage(final PartialBotApiMethod<?> message) {
+        Thread.sleep(DELAY_IN_MILLIS);
+
         final MessageType messageType = botMessageTypeResolver.resolve(message);
         switch (messageType) {
             case TEXT -> execute((BotApiMethod<?>) message);

@@ -6,6 +6,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.TimePeriod;
@@ -37,10 +38,10 @@ public class CalendarServiceImpl implements CalendarService {
 
     @SneakyThrows
     @Override
-    public List<Event> getUserEvents(@NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to) {
+    public List<Event> getUserEvents(@NotNull final String calendarId, @NotNull final DateTime from, @NotNull final DateTime to) {
         final Calendar calendarService = getCalendarService();
         return calendarService.events()
-                .list(userEmail)
+                .list(calendarId)
                 .setTimeMin(from)
                 .setTimeMax(to)
                 .setOrderBy(START_TIME_FIELD)
@@ -52,30 +53,70 @@ public class CalendarServiceImpl implements CalendarService {
     @SneakyThrows
     @Override
     public List<TimePeriod> getUserBusyTime(
-            @NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to) {
+            @NotNull final String calendarId, @NotNull final DateTime from, @NotNull final DateTime to) {
         final Calendar calendarService = getCalendarService();
-        final FreeBusyRequest freeBusyRequest = buildFreeBusyRequest(userEmail, from, to);
+        final FreeBusyRequest freeBusyRequest = buildFreeBusyRequest(calendarId, from, to);
         return calendarService.freebusy()
                 .query(freeBusyRequest)
                 .execute()
                 .getCalendars()
-                .get(userEmail)
+                .get(calendarId)
                 .getBusy();
     }
 
     @Override
     public List<Event> getFreeUserEvents(
-            @NotNull final String userEmail, @NotNull final DateTime from, @NotNull final DateTime to) {
-        final List<Event> userAllEvents = getUserEvents(userEmail, from, to);
-        final List<TimePeriod> userBusyTimePeriods = getUserBusyTime(userEmail, from, to);
+            @NotNull final String calendarId, @NotNull final DateTime from, @NotNull final DateTime to) {
+        final List<Event> userAllEvents = getUserEvents(calendarId, from, to);
+        final List<TimePeriod> userBusyTimePeriods = getUserBusyTime(calendarId, from, to);
         return findFreeUserEvents(userAllEvents, userBusyTimePeriods);
     }
 
     @Override
-    public List<Event> getFreeUserDayEvents(@NotNull final String userEmail, @NotNull final DateTime dateTime) {
+    public List<Event> getFreeUserDayEvents(@NotNull final String calendarId, @NotNull final DateTime dateTime) {
         final DateTime nextDay = addDaysToDateTime(dateTime, 1);
-        final List<Event> freeUserDayEvents = getFreeUserEvents(userEmail, dateTime, nextDay);
+        final List<Event> freeUserDayEvents = getFreeUserEvents(calendarId, dateTime, nextDay);
         return filterOutNextDayEvents(freeUserDayEvents, dateTime);
+    }
+
+    @Override
+    public Event getByStartDateTime(@NotNull final String calendarId, @NotNull final DateTime startDateTime) {
+        final DateTime to = addDaysToDateTime(startDateTime, 1);
+        final List<Event> userEvents = getUserEvents(calendarId, startDateTime, to);
+        return userEvents.stream()
+                .filter(item -> startDateTime.equals(item.getStart().getDateTime()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    // TODO will throw always... google's domain wide policy must be changed
+    @SneakyThrows
+    @Override
+    public void addGuestsToEvent(@NotNull final String calendarId, @NotNull final Event event, @NotNull final List<String> guestEmails) {
+        final Calendar calendarService = getCalendarService();
+        final Event updatedEvent = updateEventWithGuests(event, guestEmails);
+        final String eventId = updatedEvent.getId();
+        calendarService.events()
+                .update(calendarId, eventId, event)
+                .execute();
+    }
+
+    private Event updateEventWithGuests(final Event event, final List<String> guestEmails) {
+        final List<EventAttendee> eventAttendees = mapEmailsToEventAttendee(guestEmails);
+        event.setAttendees(eventAttendees);
+        return event;
+    }
+
+    private List<EventAttendee> mapEmailsToEventAttendee(final List<String> guestEmails) {
+        return guestEmails.stream()
+                .map(this::mapEmailsToEventAttendee)
+                .collect(toList());
+    }
+
+    private EventAttendee mapEmailsToEventAttendee(final String guestEmail) {
+        final EventAttendee eventAttendee = new EventAttendee();
+        eventAttendee.setEmail(guestEmail);
+        return eventAttendee;
     }
 
     private List<Event> filterOutNextDayEvents(final List<Event> events, final DateTime dateTime) {

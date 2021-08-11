@@ -22,6 +22,7 @@ import static com.amiron.booking.bot.util.CommandUtils.getEmailFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getMonthValueFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getYearValueFromCommand;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildCalendarKeyboardMarkupForDay;
+import static com.amiron.booking.bot.util.MessageBuilder.buildEditedMessageText;
 import static com.amiron.booking.calendar.util.CalendarUtils.getDateTimeFromValues;
 import static com.amiron.booking.master.util.MasterCalendarUtils.updateKeyboardMarkupWithMasterEmail;
 import static java.util.Collections.singletonList;
@@ -51,7 +52,7 @@ public class ChooseDayBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return CHOOSE_DAY;
     }
 
@@ -65,11 +66,7 @@ public class ChooseDayBotCommand extends BotCommand<CallbackQuery> {
     private List<EditMessageText> buildResponseMessage
             (final Long chatId, final Integer messageId, final String masterEmail, final List<Event> mastersDayBookings) {
         final InlineKeyboardMarkup calendarKeyboardMarkup = buildCalendarKeyboardMarkup(masterEmail, mastersDayBookings);
-        final EditMessageText message = new EditMessageText();
-        message.setMessageId(messageId);
-        message.setReplyMarkup(calendarKeyboardMarkup);
-        message.setText("Please choose time:");
-        message.setChatId(String.valueOf(chatId));
+        final EditMessageText message = buildEditedMessageText(chatId, messageId, "Please choose time:", calendarKeyboardMarkup);
         return singletonList(message);
     }
 

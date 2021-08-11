@@ -28,7 +28,7 @@ public class ChangeEmailBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return CHANGE_EMAIL;
     }
 

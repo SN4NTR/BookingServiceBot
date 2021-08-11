@@ -42,7 +42,7 @@ public class SetPhoneNumberBotCommand extends BotCommand<Contact> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return SET_PHONE_NUMBER;
     }
 
@@ -53,7 +53,7 @@ public class SetPhoneNumberBotCommand extends BotCommand<Contact> {
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage sendMessage = buildSendMessage(chatId, "Phone number is changed successfully\\!", null);
+        final SendMessage sendMessage = buildSendMessage(chatId, "Phone number is changed successfully!", null);
         return singletonList(sendMessage);
     }
 }

@@ -21,7 +21,7 @@ public class CommandsContextHolder<T extends BotApiObject> {
 
     public Optional<BotCommand<T>> findByCommand(final UserCommand command) {
         return botCommands.stream()
-                .filter(c -> c.getCommand().equals(command))
+                .filter(c -> c.getResponsibleForUserCommand().equals(command))
                 .findFirst();
     }
 }

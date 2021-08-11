@@ -34,7 +34,7 @@ public class ChooseServicesBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return CHOOSE_SERVICES;
     }
 

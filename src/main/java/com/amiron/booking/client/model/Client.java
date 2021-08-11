@@ -58,5 +58,5 @@ public class Client {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "client")
-    private List<Booking> bookingList;
+    private List<Booking> bookings;
 }

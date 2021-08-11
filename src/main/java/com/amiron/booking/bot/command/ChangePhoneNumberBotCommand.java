@@ -30,13 +30,13 @@ public class ChangePhoneNumberBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return CHANGE_PHONE_NUMBER;
     }
 
     private List<SendMessage> buildSendPhoneNumberMessage(final Long chatId) {
         final ReplyKeyboardMarkup keyboardMarkup = KeyboardBuilder.buildMarkupForPhoneNumber();
-        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please click button to send your phone number\\.", keyboardMarkup);
+        final SendMessage sendMessage = MessageBuilder.buildSendMessage(chatId, "Please click button to send your phone number.", keyboardMarkup);
         return singletonList(sendMessage);
     }
 }

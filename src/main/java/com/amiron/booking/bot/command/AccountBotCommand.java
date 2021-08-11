@@ -46,7 +46,7 @@ public class AccountBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getCommand() {
+    public UserCommand getResponsibleForUserCommand() {
         return ACCOUNT;
     }
 
@@ -65,11 +65,12 @@ public class AccountBotCommand extends BotCommand<CallbackQuery> {
 
     // TODO replace with message builder
     private String buildAccountText(final Client client) {
-        return format("*Account*\n" +
-                        "First Name: %s\n" +
-                        "Last Name: %s\n" +
-                        "Email: %s\n" +
-                        "Phone Number: \\+%s",
+        return format("""
+                        *Account*
+                        First Name: %s
+                        Last Name: %s
+                        Email: %s
+                        Phone Number: +%s""",
                 client.getFirstName(),
                 client.getLastName(),
                 client.getEmail(),

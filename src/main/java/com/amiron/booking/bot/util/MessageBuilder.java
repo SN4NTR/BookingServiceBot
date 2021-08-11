@@ -18,7 +18,7 @@ import static com.amiron.booking.bot.model.UserCommand.CHOOSE_SERVICES;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static lombok.AccessLevel.PRIVATE;
-import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWNV2;
+import static org.telegram.telegrambots.meta.api.methods.ParseMode.HTML;
 
 /**
  * @author Aliaksandr Miron
@@ -33,7 +33,7 @@ public class MessageBuilder {
         final SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(text);
-        sendMessage.setParseMode(MARKDOWNV2);
+        sendMessage.setParseMode(HTML);
         sendMessage.setReplyMarkup(replyKeyboard);
         return sendMessage;
     }
@@ -59,7 +59,7 @@ public class MessageBuilder {
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
         editMessageText.setReplyMarkup(inlineKeyboardMarkup);
-        editMessageText.setParseMode(MARKDOWNV2);
+        editMessageText.setParseMode(HTML);
         return editMessageText;
     }
 
@@ -77,11 +77,12 @@ public class MessageBuilder {
     }
 
     private static String buildMenuText() {
-        return "This menu is used to check your account settings and existing bookings\\. " +
-                "Click provided buttons for required actions\\.\n\n" +
-                "*Menu*\n" +
-                "__Account__ \\- check your account info\n" +
-                "__Book Service__ \\- book required service\n" +
-                "__Bookings__ \\- check your existing bookings\n";
+        return """
+                This menu is used to check your account settings and existing bookings. Click provided buttons for required actions.
+                
+                <b>Menu</b>
+                <i>Account</i> - check your account info
+                <i>Book Service</i> - book required service
+                <i>Bookings</i> - check your existing bookings""";
     }
 }

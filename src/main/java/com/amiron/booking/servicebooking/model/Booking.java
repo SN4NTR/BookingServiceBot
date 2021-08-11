@@ -3,8 +3,10 @@ package com.amiron.booking.servicebooking.model;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.master.model.Master;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,20 +21,25 @@ import java.util.UUID;
 /**
  * @author Aliaksandr Miron
  */
+@Table(name = "bookings")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "bookings")
+@ToString
 @Entity
-@Data
+@Getter
+@Setter
 public class Booking {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
+    @GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
     @Column(name = "date_time")
     private LocalDateTime dateTime;
+
+    @Column(name = "is_notification_sent")
+    private boolean isNotificationSent;
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")

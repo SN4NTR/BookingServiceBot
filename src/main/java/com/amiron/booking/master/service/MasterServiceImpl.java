@@ -30,4 +30,9 @@ public class MasterServiceImpl implements MasterService {
     public Master getById(@NotNull final UUID id) {
         return masterRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
+
+    @Override
+    public Master getByEmail(@NotNull final String email) {
+        return masterRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
+    }
 }

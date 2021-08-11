@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
+import java.util.Date;
 
 import static java.lang.String.format;
 import static java.time.OffsetDateTime.now;
@@ -29,6 +30,11 @@ public class CalendarUtils {
         final LocalDateTime dateTime = LocalDate.of(year, Month.of(month), dayOfMonth).atStartOfDay();
         final Instant instant = dateTime.toInstant(now().getOffset());
         return new DateTime(instant.toEpochMilli());
+    }
+
+    public static DateTime getDateTimeFromLocalDateTime(final LocalDateTime localDateTime) {
+        final Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        return new DateTime(date);
     }
 
     public static LocalDateTime getLocalDateTimeFromDateTime(final DateTime dateTime) {
