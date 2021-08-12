@@ -79,10 +79,11 @@ public class MessageBuilder {
     private static String buildMenuText() {
         return """
                 This menu is used to check your account settings and existing bookings. Click provided buttons for required actions.
-                
+                                
                 <b>Menu</b>
                 <i>Account</i> - check your account info
                 <i>Book Service</i> - book required service
-                <i>Bookings</i> - check your existing bookings""";
+                <i>Bookings</i> - check your existing bookings
+                """;
     }
 }

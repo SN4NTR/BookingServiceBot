@@ -27,13 +27,17 @@ public class MessageCommandFacadeImpl implements MessageCommandFacade {
     private final BotCommandResolver<Message> botCommandResolver;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final Message commandMessage) {
-        messageCommandGenericValidator.validate(commandMessage);
+    public List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final Message message) {
+        messageCommandGenericValidator.validate(message);
 
-        final String commandText = commandMessage.getText();
+        final BotCommand<Message> botCommand = getBotCommand(message);
+
+        return botCommand.execute(message);
+    }
+
+    private BotCommand<Message> getBotCommand(final Message message) {
+        final String commandText = message.getText();
         final BotCommandPattern botCommandPattern = botCommandPatternResolver.resolveByCommandText(commandText);
-        final BotCommand<Message> botCommand = botCommandResolver.resolveByPattern(botCommandPattern);
-
-        return botCommand.execute(commandMessage);
+        return botCommandResolver.resolveByPattern(botCommandPattern);
     }
 }

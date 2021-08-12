@@ -31,10 +31,15 @@ public class MessageTextFacadeImpl implements MessageTextFacade {
     public List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final Message message) {
         messageTextGenericValidator.validate(message);
 
-        final String messageText = message.getText();
-        final BotCommandPattern botCommandPattern = botCommandPatternResolver.resolveByMessageText(messageText).orElseThrow(BotCommandDoesNotExistException::new);
-        final BotCommand<Message> botCommand = botCommandResolver.resolveByPattern(botCommandPattern);
+        final BotCommand<Message> botCommand = getBotCommand(message);
 
         return botCommand.execute(message);
+    }
+
+    private BotCommand<Message> getBotCommand(final Message message) {
+        final String messageText = message.getText();
+        final BotCommandPattern botCommandPattern = botCommandPatternResolver.resolveByMessageText(messageText)
+                .orElseThrow(BotCommandDoesNotExistException::new);
+        return botCommandResolver.resolveByPattern(botCommandPattern);
     }
 }

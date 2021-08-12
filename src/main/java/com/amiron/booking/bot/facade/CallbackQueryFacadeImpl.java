@@ -30,10 +30,14 @@ public class CallbackQueryFacadeImpl implements CallbackQueryFacade {
     public List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final CallbackQuery callbackQuery) {
         callbackQueryGenericValidator.validate(callbackQuery);
 
-        final String data = callbackQuery.getData();
-        final BotCommandPattern botCommandPattern = botCommandPatternResolver.resolveByCommandText(data);
-        final BotCommand<CallbackQuery> botCommand = botCommandResolver.resolveByPattern(botCommandPattern);
+        final BotCommand<CallbackQuery> botCommand = getBotCommand(callbackQuery);
 
         return botCommand.execute(callbackQuery);
+    }
+
+    private BotCommand<CallbackQuery> getBotCommand(final CallbackQuery callbackQuery) {
+        final String data = callbackQuery.getData();
+        final BotCommandPattern botCommandPattern = botCommandPatternResolver.resolveByCommandText(data);
+        return botCommandResolver.resolveByPattern(botCommandPattern);
     }
 }
