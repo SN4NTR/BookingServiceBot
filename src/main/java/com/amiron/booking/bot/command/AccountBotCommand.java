@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.service.ClientService;
 import lombok.AllArgsConstructor;
@@ -16,9 +15,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.ACCOUNT;
-import static com.amiron.booking.bot.model.UserCommand.CHANGE_EMAIL;
-import static com.amiron.booking.bot.model.UserCommand.CHANGE_PHONE_NUMBER;
+import static com.amiron.booking.bot.command.BotCommandPattern.ACCOUNT;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHANGE_EMAIL;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHANGE_PHONE_NUMBER;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static com.amiron.booking.bot.util.MessageBuilder.buildEditedMessageText;
@@ -46,7 +45,7 @@ public class AccountBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return ACCOUNT;
     }
 

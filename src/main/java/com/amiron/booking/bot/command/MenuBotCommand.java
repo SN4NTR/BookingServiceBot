@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -10,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.MENU;
+import static com.amiron.booking.bot.command.BotCommandPattern.MENU;
 import static com.amiron.booking.bot.util.MessageBuilder.buildMenuMessage;
 import static java.util.Collections.singletonList;
 
@@ -29,7 +28,7 @@ public class MenuBotCommand extends BotCommand<Message> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return MENU;
     }
 }

@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.bot.util.KeyboardBuilder;
 import com.amiron.booking.bot.util.MessageBuilder;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.CHANGE_PHONE_NUMBER;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHANGE_PHONE_NUMBER;
 import static java.util.Collections.singletonList;
 
 /**
@@ -30,7 +29,7 @@ public class ChangePhoneNumberBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return CHANGE_PHONE_NUMBER;
     }
 

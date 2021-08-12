@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.master.model.Master;
 import com.amiron.booking.servicebooking.model.Booking;
 import com.amiron.booking.servicebooking.service.BookingService;
@@ -19,8 +18,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static com.amiron.booking.bot.model.UserCommand.CANCEL_BOOKING;
-import static com.amiron.booking.bot.model.UserCommand.GET_BOOKINGS;
+import static com.amiron.booking.bot.command.BotCommandPattern.CANCEL_BOOKING;
+import static com.amiron.booking.bot.command.BotCommandPattern.GET_BOOKINGS;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
@@ -43,7 +42,7 @@ public class GetBookingsBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return GET_BOOKINGS;
     }
 

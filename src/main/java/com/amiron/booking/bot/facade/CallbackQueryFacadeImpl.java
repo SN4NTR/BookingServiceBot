@@ -1,9 +1,9 @@
 package com.amiron.booking.bot.facade;
 
 import com.amiron.booking.bot.command.BotCommand;
-import com.amiron.booking.bot.model.UserCommand;
+import com.amiron.booking.bot.command.BotCommandPattern;
+import com.amiron.booking.bot.resolver.BotCommandPatternResolver;
 import com.amiron.booking.bot.resolver.BotCommandResolver;
-import com.amiron.booking.bot.resolver.UserCommandResolver;
 import com.amiron.booking.bot.validator.CallbackQueryGenericValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ import java.util.List;
 public class CallbackQueryFacadeImpl implements CallbackQueryFacade {
 
     private final CallbackQueryGenericValidator callbackQueryGenericValidator;
-    private final UserCommandResolver userCommandResolver;
+    private final BotCommandPatternResolver botCommandPatternResolver;
     private final BotCommandResolver<CallbackQuery> botCommandResolver;
 
     @Override
@@ -31,8 +31,8 @@ public class CallbackQueryFacadeImpl implements CallbackQueryFacade {
         callbackQueryGenericValidator.validate(callbackQuery);
 
         final String data = callbackQuery.getData();
-        final UserCommand userCommand = userCommandResolver.resolveByCommandText(data);
-        final BotCommand<CallbackQuery> botCommand = botCommandResolver.resolve(userCommand);
+        final BotCommandPattern botCommandPattern = botCommandPatternResolver.resolveByCommandText(data);
+        final BotCommand<CallbackQuery> botCommand = botCommandResolver.resolveByPattern(botCommandPattern);
 
         return botCommand.execute(callbackQuery);
     }

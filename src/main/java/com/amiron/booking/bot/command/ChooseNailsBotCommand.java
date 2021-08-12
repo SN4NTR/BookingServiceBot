@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.bot.util.MessageBuilder;
 import com.amiron.booking.master.model.Master;
 import com.amiron.booking.master.service.MasterService;
@@ -17,8 +16,8 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MASTER;
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_NAILS;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_MASTER;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_NAILS;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkup;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendPhotoMessage;
 import static java.lang.String.format;
@@ -51,7 +50,7 @@ public class ChooseNailsBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return CHOOSE_NAILS;
     }
 

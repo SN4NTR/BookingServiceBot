@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Contact;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.SET_PHONE_NUMBER;
+import static com.amiron.booking.bot.command.BotCommandPattern.SET_PHONE_NUMBER;
 
 /**
  * @author Aliaksandr Miron
@@ -29,7 +29,7 @@ public class ContactFacadeImpl implements ContactFacade {
     public List<? extends PartialBotApiMethod<?>> onReceive(@NotNull final Contact contact) {
         contactGenericValidator.validate(contact);
 
-        final BotCommand<Contact> botCommand = botCommandResolver.resolve(SET_PHONE_NUMBER);
+        final BotCommand<Contact> botCommand = botCommandResolver.resolveByPattern(SET_PHONE_NUMBER);
 
         return botCommand.execute(contact);
     }

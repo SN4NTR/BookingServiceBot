@@ -12,9 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import static com.amiron.booking.bot.model.UserCommand.ACCOUNT;
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_SERVICES;
-import static com.amiron.booking.bot.model.UserCommand.GET_BOOKINGS;
+import static com.amiron.booking.bot.command.BotCommandPattern.ACCOUNT;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_SERVICES;
+import static com.amiron.booking.bot.command.BotCommandPattern.GET_BOOKINGS;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static lombok.AccessLevel.PRIVATE;

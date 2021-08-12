@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.model.converter.ClientConverter;
@@ -15,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.START;
+import static com.amiron.booking.bot.command.BotCommandPattern.START;
 import static com.amiron.booking.bot.util.MessageBuilder.buildMenuMessage;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.util.Arrays.asList;
@@ -42,7 +41,7 @@ public class StartBotCommand extends BotCommand<Message> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return START;
     }
 

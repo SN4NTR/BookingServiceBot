@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.calendar.service.CalendarService;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
@@ -16,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_DAY;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_DAY;
 import static com.amiron.booking.bot.util.CommandUtils.getDayOfMonthValueFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getEmailFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getMonthValueFromCommand;
@@ -52,7 +51,7 @@ public class ChooseDayBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return CHOOSE_DAY;
     }
 

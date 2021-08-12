@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.client.facade.ClientFacade;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.service.ClientService;
@@ -14,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.SET_EMAIL;
+import static com.amiron.booking.bot.command.BotCommandPattern.SET_EMAIL;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.util.Collections.singletonList;
 
@@ -42,7 +41,7 @@ public class SetEmailBotCommand extends BotCommand<Message> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return SET_EMAIL;
     }
 

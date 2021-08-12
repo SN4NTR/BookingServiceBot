@@ -1,9 +1,9 @@
 package com.amiron.booking.bot.facade;
 
 import com.amiron.booking.bot.command.BotCommand;
-import com.amiron.booking.bot.model.UserCommand;
+import com.amiron.booking.bot.command.BotCommandPattern;
+import com.amiron.booking.bot.resolver.BotCommandPatternResolver;
 import com.amiron.booking.bot.resolver.BotCommandResolver;
-import com.amiron.booking.bot.resolver.UserCommandResolver;
 import com.amiron.booking.bot.validator.MessageCommandGenericValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.util.List;
 public class MessageCommandFacadeImpl implements MessageCommandFacade {
 
     private final MessageCommandGenericValidator messageCommandGenericValidator;
-    private final UserCommandResolver userCommandResolver;
+    private final BotCommandPatternResolver botCommandPatternResolver;
     private final BotCommandResolver<Message> botCommandResolver;
 
     @Override
@@ -31,8 +31,8 @@ public class MessageCommandFacadeImpl implements MessageCommandFacade {
         messageCommandGenericValidator.validate(commandMessage);
 
         final String commandText = commandMessage.getText();
-        final UserCommand userCommand = userCommandResolver.resolveByCommandText(commandText);
-        final BotCommand<Message> botCommand = botCommandResolver.resolve(userCommand);
+        final BotCommandPattern botCommandPattern = botCommandPatternResolver.resolveByCommandText(commandText);
+        final BotCommand<Message> botCommand = botCommandResolver.resolveByPattern(botCommandPattern);
 
         return botCommand.execute(commandMessage);
     }

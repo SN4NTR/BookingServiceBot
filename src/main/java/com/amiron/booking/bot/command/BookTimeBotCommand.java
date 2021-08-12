@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.calendar.service.CalendarService;
 import com.amiron.booking.client.model.Client;
 import com.amiron.booking.client.service.ClientService;
@@ -23,7 +22,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.BOOK_TIME;
+import static com.amiron.booking.bot.command.BotCommandPattern.BOOK_TIME;
 import static com.amiron.booking.bot.util.CommandUtils.getDayOfMonthValueFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getEmailFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getHoursValueFromCommand;
@@ -57,7 +56,7 @@ public class BookTimeBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return BOOK_TIME;
     }
 

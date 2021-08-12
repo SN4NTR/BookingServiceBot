@@ -1,10 +1,10 @@
 package com.amiron.booking.bot.facade;
 
 import com.amiron.booking.bot.command.BotCommand;
-import com.amiron.booking.bot.exception.CommandDoesNotExistException;
-import com.amiron.booking.bot.model.UserCommand;
+import com.amiron.booking.bot.command.BotCommandPattern;
+import com.amiron.booking.bot.exception.BotCommandDoesNotExistException;
+import com.amiron.booking.bot.resolver.BotCommandPatternResolver;
 import com.amiron.booking.bot.resolver.BotCommandResolver;
-import com.amiron.booking.bot.resolver.UserCommandResolver;
 import com.amiron.booking.bot.validator.MessageTextGenericValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import java.util.List;
 public class MessageTextFacadeImpl implements MessageTextFacade {
 
     private final MessageTextGenericValidator messageTextGenericValidator;
-    private final UserCommandResolver userCommandResolver;
+    private final BotCommandPatternResolver botCommandPatternResolver;
     private final BotCommandResolver<Message> botCommandResolver;
 
     @Override
@@ -32,8 +32,8 @@ public class MessageTextFacadeImpl implements MessageTextFacade {
         messageTextGenericValidator.validate(message);
 
         final String messageText = message.getText();
-        final UserCommand userCommand = userCommandResolver.resolveByMessageText(messageText).orElseThrow(CommandDoesNotExistException::new);
-        final BotCommand<Message> botCommand = botCommandResolver.resolve(userCommand);
+        final BotCommandPattern botCommandPattern = botCommandPatternResolver.resolveByMessageText(messageText).orElseThrow(BotCommandDoesNotExistException::new);
+        final BotCommand<Message> botCommand = botCommandResolver.resolveByPattern(botCommandPattern);
 
         return botCommand.execute(message);
     }

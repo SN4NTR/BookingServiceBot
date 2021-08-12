@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.bot.util.MessageBuilder;
 import com.amiron.booking.calendar.service.CalendarService;
 import com.google.api.client.util.DateTime;
@@ -18,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MONTH;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_MONTH;
 import static com.amiron.booking.bot.util.CommandUtils.getDayOfMonthValueFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getEmailFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getMonthValueFromCommand;
@@ -52,7 +51,7 @@ public class ChooseMonthBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return CHOOSE_MONTH;
     }
 

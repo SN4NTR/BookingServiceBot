@@ -17,9 +17,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_DAY;
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MONTH;
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_TIME;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_DAY;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_MONTH;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_TIME;
 import static com.amiron.booking.calendar.util.CalendarUtils.getLocalDateTimeFromDateTime;
 import static com.amiron.booking.calendar.util.CalendarUtils.getTimeAsStringFromDate;
 import static java.lang.String.format;

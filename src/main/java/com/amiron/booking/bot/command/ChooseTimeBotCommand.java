@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.master.model.Master;
 import com.amiron.booking.master.service.MasterService;
 import lombok.AllArgsConstructor;
@@ -16,9 +15,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.BOOK_TIME;
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_TIME;
-import static com.amiron.booking.bot.model.UserCommand.MENU;
+import static com.amiron.booking.bot.command.BotCommandPattern.BOOK_TIME;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_TIME;
+import static com.amiron.booking.bot.command.BotCommandPattern.MENU;
 import static com.amiron.booking.bot.util.CommandUtils.getDayOfMonthValueFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getEmailFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getHoursValueFromCommand;
@@ -55,7 +54,7 @@ public class ChooseTimeBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return CHOOSE_TIME;
     }
 

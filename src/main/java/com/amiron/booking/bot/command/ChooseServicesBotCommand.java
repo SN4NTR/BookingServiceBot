@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -12,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_NAILS;
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_SERVICES;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_NAILS;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_SERVICES;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
 import static com.amiron.booking.bot.util.MessageBuilder.buildEditedMessageText;
@@ -34,7 +33,7 @@ public class ChooseServicesBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return CHOOSE_SERVICES;
     }
 

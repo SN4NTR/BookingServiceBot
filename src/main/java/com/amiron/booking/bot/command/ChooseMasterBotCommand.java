@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.calendar.service.CalendarService;
 import com.amiron.booking.master.model.Master;
 import com.amiron.booking.master.service.MasterService;
@@ -19,7 +18,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import static com.amiron.booking.bot.model.UserCommand.CHOOSE_MASTER;
+import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_MASTER;
 import static com.amiron.booking.bot.util.CommandUtils.getUuidFromCommand;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildCalendarKeyboardMarkupForCurrentMonth;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
@@ -48,7 +47,7 @@ public class ChooseMasterBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return CHOOSE_MASTER;
     }
 

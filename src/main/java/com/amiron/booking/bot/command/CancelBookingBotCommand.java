@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import com.amiron.booking.bot.util.CommandUtils;
 import com.amiron.booking.servicebooking.service.BookingService;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
-import static com.amiron.booking.bot.model.UserCommand.CANCEL_BOOKING;
+import static com.amiron.booking.bot.command.BotCommandPattern.CANCEL_BOOKING;
 import static com.amiron.booking.bot.util.MessageBuilder.buildEditedMessageText;
 import static java.util.Collections.singletonList;
 
@@ -38,7 +37,7 @@ public class CancelBookingBotCommand extends BotCommand<CallbackQuery> {
     }
 
     @Override
-    public UserCommand getResponsibleForUserCommand() {
+    public BotCommandPattern getCommandPattern() {
         return CANCEL_BOOKING;
     }
 

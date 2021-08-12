@@ -1,6 +1,5 @@
 package com.amiron.booking.bot.command;
 
-import com.amiron.booking.bot.model.UserCommand;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
@@ -15,13 +14,13 @@ import java.util.Optional;
 @AllArgsConstructor
 @Component
 @Getter
-public class CommandsContextHolder<T extends BotApiObject> {
+public class BotCommandsContextHolder<T extends BotApiObject> {
 
     private final List<BotCommand<T>> botCommands;
 
-    public Optional<BotCommand<T>> findByCommand(final UserCommand command) {
+    public Optional<BotCommand<T>> findByCommand(final BotCommandPattern command) {
         return botCommands.stream()
-                .filter(c -> c.getResponsibleForUserCommand().equals(command))
+                .filter(c -> c.getCommandPattern().equals(command))
                 .findFirst();
     }
 }
