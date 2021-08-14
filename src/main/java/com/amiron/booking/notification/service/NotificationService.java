@@ -36,7 +36,7 @@ public class NotificationService {
     @Value("${service.notification.before-hours}")
     private Integer notifyBeforeHours;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 60_000)
     public void notifyAboutBooking() {
         final List<Booking> bookings = bookingService.getAll();
         final List<Booking> bookingsToNotify = findBookingsToNotify(bookings);
@@ -80,9 +80,8 @@ public class NotificationService {
                 <b>Booking reminder notification</b>
                                 
                 Dear client, we would like to remind you about booked service.
-                Master's First name: %s
-                Master's Last name: %s
-                Date: %s-%s-%s
+                Master: %s %s
+                Date: %s.%s.%s
                 Time: %s:%s
                 """, firstName, lastName, dayOfMonth, month, year, hour, minute);
     }
