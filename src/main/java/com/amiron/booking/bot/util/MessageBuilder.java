@@ -39,7 +39,7 @@ public class MessageBuilder {
     }
 
     // TODO real photo
-    public static SendPhoto buildSendPhotoMessage(final Long chatId, final byte[] photo, final String caption) {
+    public static SendPhoto buildSendPhotoMessage(final Long chatId, final byte[] photo, final String caption, final ReplyKeyboard keyboard) {
         final InputStream inputStream = new ByteArrayInputStream(photo);
         final InputFile inputFile = new InputFile("https://as.ftcdn.net/r/v1/pics/dba1341b7e0ef32dd2cd034ed7501df0d4f9ba28/home/discover_collections/21Jun/premium.jpg");
 
@@ -47,6 +47,7 @@ public class MessageBuilder {
         sendPhoto.setChatId(String.valueOf(chatId));
         sendPhoto.setPhoto(inputFile);
         sendPhoto.setCaption(caption);
+        sendPhoto.setReplyMarkup(keyboard);
         return sendPhoto;
     }
 

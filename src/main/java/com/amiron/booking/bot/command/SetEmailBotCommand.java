@@ -29,30 +29,33 @@ public class SetEmailBotCommand extends BotCommand<Message> {
     private final ClientFacade userFacade;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Message message) {
-        final Long userId = message.getFrom().getId();
-        final String email = message.getText();
-
-        final Client client = findUserAndSetEmail(userId, email);
-        userFacade.onUpdate(client);
-
-        final Long chatId = message.getChatId();
-        return buildResponseMessage(chatId);
+    public BotCommandPattern getCommandPattern() {
+        return SET_EMAIL;
     }
 
     @Override
-    public BotCommandPattern getCommandPattern() {
-        return SET_EMAIL;
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Message message) {
+        return buildResponseMessage(message);
+    }
+
+    private List<SendMessage> buildResponseMessage(final Message message) {
+        final Long chatId = message.getChatId();
+        final Long userId = message.getFrom().getId();
+        final String email = message.getText();
+        updateClientEmail(userId, email);
+
+        final SendMessage sendMessage = buildSendMessage(chatId, "Email changed successfully!", null);
+        return singletonList(sendMessage);
+    }
+
+    private void updateClientEmail(final Long userId, final String email) {
+        final Client client = findUserAndSetEmail(userId, email);
+        userFacade.onUpdate(client);
     }
 
     private Client findUserAndSetEmail(final Long userId, final String email) {
         final Client existingClient = clientService.getTelegramId(userId);
         existingClient.setEmail(email);
         return existingClient;
-    }
-
-    private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage sendMessage = buildSendMessage(chatId, "Email changed successfully!", null);
-        return singletonList(sendMessage);
     }
 }

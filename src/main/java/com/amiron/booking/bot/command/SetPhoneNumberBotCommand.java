@@ -29,30 +29,33 @@ public class SetPhoneNumberBotCommand extends BotCommand<Contact> {
     private final ClientFacade clientFacade;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Contact contact) {
-        final Long userId = contact.getUserId();
-        final String phoneNumber = contact.getPhoneNumber();
-
-        final Client client = setPhoneNumberForExistingUser(userId, phoneNumber);
-        clientFacade.onUpdate(client);
-
-        final Long chatId = client.getChatId();
-        return buildResponseMessage(chatId);
+    public BotCommandPattern getCommandPattern() {
+        return SET_PHONE_NUMBER;
     }
 
     @Override
-    public BotCommandPattern getCommandPattern() {
-        return SET_PHONE_NUMBER;
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Contact contact) {
+        return buildResponseMessage(contact);
+    }
+
+    private List<SendMessage> buildResponseMessage(final Contact contact) {
+        final Long userId = contact.getUserId();
+        final String phoneNumber = contact.getPhoneNumber();
+        final Client client = updateClientPhoneNumber(userId, phoneNumber);
+        final Long chatId = client.getChatId();
+
+        final SendMessage sendMessage = buildSendMessage(chatId, "Phone number is changed successfully!", null);
+        return singletonList(sendMessage);
+    }
+
+    private Client updateClientPhoneNumber(final Long userId, final String phoneNumber) {
+        final Client client = setPhoneNumberForExistingUser(userId, phoneNumber);
+        return clientFacade.onUpdate(client);
     }
 
     private Client setPhoneNumberForExistingUser(final Long userId, final String phoneNumber) {
         final Client existingClient = clientService.getTelegramId(userId);
         existingClient.setPhoneNumber(phoneNumber);
         return existingClient;
-    }
-
-    private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage sendMessage = buildSendMessage(chatId, "Phone number is changed successfully!", null);
-        return singletonList(sendMessage);
     }
 }

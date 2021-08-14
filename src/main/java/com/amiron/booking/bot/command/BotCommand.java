@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public abstract class BotCommand<T extends BotApiObject> {
 
-    public abstract List<? extends PartialBotApiMethod<?>> execute(@NotNull final T payload);
-
     public abstract BotCommandPattern getCommandPattern();
+
+    public abstract List<? extends PartialBotApiMethod<?>> execute(@NotNull final T payload);
 }

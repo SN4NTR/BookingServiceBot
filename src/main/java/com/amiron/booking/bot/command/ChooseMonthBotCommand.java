@@ -41,36 +41,42 @@ public class ChooseMonthBotCommand extends BotCommand<CallbackQuery> {
     private final CalendarService calendarService;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
-        final Message message = callbackQuery.getMessage();
-        final Long chatId = message.getChatId();
-        final Integer messageId = message.getMessageId();
-        final String callbackText = callbackQuery.getData();
-        final String mastersEmail = getEmailFromCommand(callbackText);
-        return buildResponseMessage(chatId, messageId, callbackText, mastersEmail);
-    }
-
-    @Override
     public BotCommandPattern getCommandPattern() {
         return CHOOSE_MONTH;
     }
 
-    private List<EditMessageText> buildResponseMessage(
-            final Long chatId, final Integer messageId, final String callbackText, final String masterEmail) {
-        final InlineKeyboardMarkup calendarKeyboardMarkup = buildCalendarKeyboardMarkup(callbackText, masterEmail);
-        final EditMessageText message = MessageBuilder.buildEditedMessageText(chatId, messageId, "Please choose a day:", calendarKeyboardMarkup);
-        return singletonList(message);
+    @Override
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
+        final Message message = callbackQuery.getMessage();
+        final String callbackData = callbackQuery.getData();
+        final String mastersEmail = getEmailFromCommand(callbackData);
+        final DateTime from = getDateTimeFromCallbackData(callbackData);
+        final List<Event> mastersFreeEvents = getMastersFreeEventsByCallbackData(mastersEmail, callbackQuery);
+        return buildResponseToMessage(message, mastersEmail, from, mastersFreeEvents);
     }
 
-    private InlineKeyboardMarkup buildCalendarKeyboardMarkup(final String callbackText, final String masterEmail) {
-        final DateTime from = getDateTimeFromCallbackData(callbackText);
+    private List<Event> getMastersFreeEventsByCallbackData(final String mastersEmail, final CallbackQuery callbackQuery) {
+        final String callbackData = callbackQuery.getData();
+        final DateTime from = getDateTimeFromCallbackData(callbackData);
         final DateTime to = addDaysToDateTime(from, 31);
-        final List<Event> mastersBookings = calendarService.getFreeUserEvents(masterEmail, from, to);
+        return calendarService.getFreeUserEvents(mastersEmail, from, to);
+    }
 
+    private List<EditMessageText> buildResponseToMessage(
+            final Message message, final String mastersEmail, final DateTime from, final List<Event> mastersFreeEvents) {
+        final Long chatId = message.getChatId();
+        final Integer messageId = message.getMessageId();
+        final InlineKeyboardMarkup calendarKeyboardMarkup = buildCalendarKeyboardMarkup(mastersEmail, from, mastersFreeEvents);
+        final EditMessageText responseMessage = MessageBuilder.buildEditedMessageText(chatId, messageId, "Please choose a day:", calendarKeyboardMarkup);
+        return singletonList(responseMessage);
+    }
+
+    private InlineKeyboardMarkup buildCalendarKeyboardMarkup(
+            final String mastersEmail, final DateTime from, final List<Event> mastersFreeEvents) {
         final LocalDate localDate = getLocalDateFromDateTime(from);
         final InlineKeyboardMarkup calendarKeyboard = buildCalendarKeyboardForDate(localDate);
-        updateKeyboardMarkupWithMasterFreeDates(calendarKeyboard, from, mastersBookings);
-        updateKeyboardMarkupWithMasterEmail(calendarKeyboard, masterEmail);
+        updateKeyboardMarkupWithMasterFreeDates(calendarKeyboard, from, mastersFreeEvents);
+        updateKeyboardMarkupWithMasterEmail(calendarKeyboard, mastersEmail);
         return calendarKeyboard;
     }
 

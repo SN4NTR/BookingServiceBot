@@ -18,7 +18,7 @@ public interface CalendarService {
 
     List<Event> getFreeUserEvents(@NotNull final String calendarId, @NotNull final DateTime from, @NotNull final DateTime to);
 
-    List<Event> getFreeUserDayEvents(@NotNull final String calendarId, @NotNull final DateTime dateTime);
+    List<Event> getUsersFreeDayEvents(@NotNull final String calendarId, @NotNull final DateTime dateTime);
 
     Event getByStartDateTime(@NotNull final String calendarId, @NotNull final DateTime dateTime);
 

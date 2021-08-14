@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -26,22 +27,22 @@ import static java.util.Collections.singletonList;
 public class ChooseServicesBotCommand extends BotCommand<CallbackQuery> {
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
-        final Long chatId = callbackQuery.getMessage().getChatId();
-        final Integer messageId = callbackQuery.getMessage().getMessageId();
-        return buildResponseMessage(chatId, messageId);
-    }
-
-    @Override
     public BotCommandPattern getCommandPattern() {
         return CHOOSE_SERVICES;
     }
 
-    private List<EditMessageText> buildResponseMessage(final Long chatId, final Integer messageId) {
-        final String accountText = "Choose required service:";
+    @Override
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
+        final Message message = callbackQuery.getMessage();
+        return buildResponseToMessage(message);
+    }
+
+    private List<EditMessageText> buildResponseToMessage(final Message message) {
+        final Long chatId = message.getChatId();
+        final Integer messageId = message.getMessageId();
         final InlineKeyboardMarkup keyboardMarkup = buildKeyboardMarkup();
-        final EditMessageText message = buildEditedMessageText(chatId, messageId, accountText, keyboardMarkup);
-        return singletonList(message);
+        final EditMessageText responseMessage = buildEditedMessageText(chatId, messageId, "Choose required service:", keyboardMarkup);
+        return singletonList(responseMessage);
     }
 
     private InlineKeyboardMarkup buildKeyboardMarkup() {

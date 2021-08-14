@@ -21,14 +21,14 @@ import static java.util.Collections.singletonList;
 public class MenuBotCommand extends BotCommand<Message> {
 
     @Override
+    public BotCommandPattern getCommandPattern() {
+        return MENU;
+    }
+
+    @Override
     public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Message message) {
         final Long chatId = message.getChatId();
         final SendMessage menuMessage = buildMenuMessage(chatId);
         return singletonList(menuMessage);
-    }
-
-    @Override
-    public BotCommandPattern getCommandPattern() {
-        return MENU;
     }
 }

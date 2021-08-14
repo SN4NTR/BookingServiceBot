@@ -21,14 +21,14 @@ import static java.util.Collections.singletonList;
 public class ChangeEmailBotCommand extends BotCommand<CallbackQuery> {
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
-        final Long chatId = callbackQuery.getMessage().getChatId();
-        return buildResponseMessage(chatId);
+    public BotCommandPattern getCommandPattern() {
+        return CHANGE_EMAIL;
     }
 
     @Override
-    public BotCommandPattern getCommandPattern() {
-        return CHANGE_EMAIL;
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
+        final Long chatId = callbackQuery.getMessage().getChatId();
+        return buildResponseMessage(chatId);
     }
 
     private List<SendMessage> buildResponseMessage(final Long chatId) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -22,6 +23,7 @@ import static com.amiron.booking.bot.command.BotCommandPattern.CANCEL_BOOKING;
 import static com.amiron.booking.bot.command.BotCommandPattern.GET_BOOKINGS;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardButton;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMarkupWithButtonsFromNewLine;
+import static com.amiron.booking.bot.util.MessageBuilder.buildEditedMessageText;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
@@ -37,44 +39,43 @@ public class GetBookingsBotCommand extends BotCommand<CallbackQuery> {
     private final BookingService bookingService;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
-        return buildResponseMessages(callbackQuery);
-    }
-
-    @Override
     public BotCommandPattern getCommandPattern() {
         return GET_BOOKINGS;
     }
 
-    private List<SendMessage> buildResponseMessages(final CallbackQuery callbackQuery) {
+    @Override
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
+        return buildResponseMessage(callbackQuery);
+    }
+
+    private List<SendMessage> buildResponseMessage(final CallbackQuery callbackQuery) {
         final Message message = callbackQuery.getMessage();
         final Long chatId = message.getChatId();
         final Integer messageId = message.getMessageId();
         final String username = callbackQuery.getFrom().getUserName();
-
         final List<Booking> userBookings = bookingService.getAllByClientUsername(username);
 
-        final SendMessage headerMessage = buildHeaderMessage(chatId);
-        final List<SendMessage> messages = buildBookingsMessages(chatId, userBookings);
+        final EditMessageText headerMessage = buildHeaderMessage(chatId, messageId);
+        final List messages = buildBookingsInfoMessages(chatId, userBookings);
         messages.add(0, headerMessage);
         return messages;
     }
 
-    private List<SendMessage> buildBookingsMessages(final Long chatId, final List<Booking> userBookings) {
+    private List<SendMessage> buildBookingsInfoMessages(final Long chatId, final List<Booking> userBookings) {
         return userBookings.stream()
-                .map(booking -> buildBookingMessage(chatId, booking))
+                .map(booking -> buildBookingInfoMessage(chatId, booking))
                 .collect(toList());
     }
 
-    private SendMessage buildBookingMessage(final Long chatId, final Booking booking) {
+    private SendMessage buildBookingInfoMessage(final Long chatId, final Booking booking) {
         final String text = buildTextByBookingInfo(booking);
         final InlineKeyboardMarkup keyboardMarkup = buildKeyboardMarkup(booking);
         return buildSendMessage(chatId, text, keyboardMarkup);
     }
 
-    private SendMessage buildHeaderMessage(final Long chatId) {
+    private EditMessageText buildHeaderMessage(final Long chatId, final Integer messageId) {
         final String header = "Active bookings:";
-        return buildSendMessage(chatId, header, null);
+        return buildEditedMessageText(chatId, messageId, header, null);
     }
 
     private InlineKeyboardMarkup buildKeyboardMarkup(final Booking booking) {

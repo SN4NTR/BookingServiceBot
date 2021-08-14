@@ -30,24 +30,27 @@ public class StartBotCommand extends BotCommand<Message> {
     private final ClientFacade userFacade;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Message message) {
-        final Long chatId = message.getChatId();
-        final User telegramUser = message.getFrom();
-        final Client client = ClientConverter.fromTelegramUser(chatId, telegramUser);
-
-        userFacade.onCreate(client);
-
-        return buildResponseMessage(chatId);
-    }
-
-    @Override
     public BotCommandPattern getCommandPattern() {
         return START;
     }
 
-    private List<SendMessage> buildResponseMessage(final Long chatId) {
-        final SendMessage message = buildSendMessage(chatId, "Welcome to Booking Bot!", null);
+    @Override
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final Message message) {
+        return buildResponseMessage(message);
+    }
+
+    private List<SendMessage> buildResponseMessage(final Message message) {
+        final Long chatId = message.getChatId();
+        final User telegramUser = message.getFrom();
+        createUser(chatId, telegramUser);
+
+        final SendMessage welcomeMessage = buildSendMessage(chatId, "Welcome to Booking Bot!", null);
         final SendMessage menuMessage = buildMenuMessage(chatId);
-        return asList(message, menuMessage);
+        return asList(welcomeMessage, menuMessage);
+    }
+
+    private void createUser(final Long chatId, final User telegramUser) {
+        final Client client = ClientConverter.fromTelegramUser(chatId, telegramUser);
+        userFacade.onCreate(client);
     }
 }

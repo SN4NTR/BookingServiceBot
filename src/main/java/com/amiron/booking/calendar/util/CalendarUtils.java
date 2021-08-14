@@ -21,6 +21,10 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class CalendarUtils {
 
+    public static DateTime getCurrentDateTime() {
+        return new DateTime(Instant.now().toEpochMilli());
+    }
+
     public static int getDayOfMonthFromDate(final DateTime dateTime) {
         final LocalDate localDate = getLocalDateFromDateTime(dateTime);
         return localDate.getDayOfMonth();

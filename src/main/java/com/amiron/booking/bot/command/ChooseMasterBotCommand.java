@@ -14,7 +14,6 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,9 +21,10 @@ import static com.amiron.booking.bot.command.BotCommandPattern.CHOOSE_MASTER;
 import static com.amiron.booking.bot.util.CommandUtils.getUuidFromCommand;
 import static com.amiron.booking.bot.util.KeyboardBuilder.buildCalendarKeyboardMarkupForCurrentMonth;
 import static com.amiron.booking.bot.util.MessageBuilder.buildSendMessage;
+import static com.amiron.booking.calendar.util.CalendarUtils.addDaysToDateTime;
+import static com.amiron.booking.calendar.util.CalendarUtils.getCurrentDateTime;
 import static com.amiron.booking.master.util.MasterCalendarUtils.updateKeyboardMarkupWithMasterEmail;
 import static com.amiron.booking.master.util.MasterCalendarUtils.updateKeyboardMarkupWithMasterFreeDates;
-import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Collections.singletonList;
 
 /**
@@ -39,34 +39,44 @@ public class ChooseMasterBotCommand extends BotCommand<CallbackQuery> {
     private final CalendarService calendarService;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
-        final Long chatId = callbackQuery.getMessage().getChatId();
-        final String callbackText = callbackQuery.getData();
-        final UUID masterId = getUuidFromCommand(callbackText);
-        return buildResponseMessage(chatId, masterId);
-    }
-
-    @Override
     public BotCommandPattern getCommandPattern() {
         return CHOOSE_MASTER;
     }
 
-    private List<SendMessage> buildResponseMessage(final Long chatId, final UUID masterId) {
-        final InlineKeyboardMarkup calendarKeyboardMarkup = buildCalendarKeyboardMarkup(masterId);
+    @Override
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
+        final Long chatId = callbackQuery.getMessage().getChatId();
+        final Master master = getMasterFromCallbackData(callbackQuery);
+        final List<Event> mastersFreeCalendarEventsForMonth = getMastersFreeCalendarEventsForMonth(master);
+        return buildResponseMessage(chatId, master, mastersFreeCalendarEventsForMonth);
+    }
+
+    private Master getMasterFromCallbackData(final CallbackQuery callbackQuery) {
+        final String callbackText = callbackQuery.getData();
+        final UUID masterId = getUuidFromCommand(callbackText);
+        return masterService.getById(masterId);
+    }
+
+    private List<Event> getMastersFreeCalendarEventsForMonth(final Master master) {
+        final String mastersEmail = master.getEmail();
+        final DateTime from = getCurrentDateTime();
+        final DateTime to = addDaysToDateTime(from, 31);
+        return calendarService.getFreeUserEvents(mastersEmail, from, to);
+    }
+
+    private List<SendMessage> buildResponseMessage(final Long chatId, final Master master, final List<Event> freeMasterEvents) {
+        final InlineKeyboardMarkup calendarKeyboardMarkup = buildMastersCalendarKeyboardMarkup(master, freeMasterEvents);
         final SendMessage message = buildSendMessage(chatId, "Please choose a day:", calendarKeyboardMarkup);
         return singletonList(message);
     }
 
-    private InlineKeyboardMarkup buildCalendarKeyboardMarkup(final UUID masterId) {
-        final Master master = masterService.getById(masterId);
-        final String masterEmail = master.getEmail();
-        final DateTime from = new DateTime(Instant.now().toEpochMilli());
-        final DateTime to = new DateTime(Instant.now().plus(31, DAYS).toEpochMilli());
-        final List<Event> freeMasterBookings = calendarService.getFreeUserEvents(masterEmail, from, to);
+    private InlineKeyboardMarkup buildMastersCalendarKeyboardMarkup(final Master master, final List<Event> freeMasterEvents) {
+        final String mastersEmail = master.getEmail();
+        final DateTime from = getCurrentDateTime();
 
         final InlineKeyboardMarkup calendarKeyboard = buildCalendarKeyboardMarkupForCurrentMonth();
-        updateKeyboardMarkupWithMasterFreeDates(calendarKeyboard, from, freeMasterBookings);
-        updateKeyboardMarkupWithMasterEmail(calendarKeyboard, masterEmail);
+        updateKeyboardMarkupWithMasterFreeDates(calendarKeyboard, from, freeMasterEvents);
+        updateKeyboardMarkupWithMasterEmail(calendarKeyboard, mastersEmail);
         return calendarKeyboard;
     }
 }

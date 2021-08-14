@@ -31,7 +31,6 @@ import static com.amiron.booking.bot.util.CommandUtils.getMonthValueFromCommand;
 import static com.amiron.booking.bot.util.CommandUtils.getYearValueFromCommand;
 import static com.amiron.booking.bot.util.MessageBuilder.buildEditedMessageText;
 import static com.amiron.booking.calendar.util.CalendarUtils.getDateTimeFromLocalDateTime;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 /**
@@ -48,46 +47,46 @@ public class BookTimeBotCommand extends BotCommand<CallbackQuery> {
     private final CalendarService calendarService;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
-        final Message message = callbackQuery.getMessage();
-        final Booking booking = saveBooking(callbackQuery);
-        updateCalendarEvent(booking);
-        return buildResponseMessage(message);
-    }
-
-    @Override
     public BotCommandPattern getCommandPattern() {
         return BOOK_TIME;
     }
 
-    private void updateCalendarEvent(final Booking booking) {
-        final String clientEmail = booking.getClient().getEmail();
-        final String masterEmail = booking.getMaster().getEmail();
-        final LocalDateTime localDateTime = booking.getDateTime();
-        final DateTime dateTime = getDateTimeFromLocalDateTime(localDateTime);
-        final Event bookingEvent = calendarService.getByStartDateTime(masterEmail, dateTime);
-        calendarService.addGuestsToEvent(masterEmail, bookingEvent, asList(masterEmail, clientEmail));
+    @Override
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
+        final Message message = callbackQuery.getMessage();
+        final Booking booking = buildBookingByCallbackData(callbackQuery);
+        final Booking savedBooking = bookingService.save(booking);
+        updateCalendarEventWithBookingInfo(savedBooking);
+        return buildResponseToMessage(message);
     }
 
-    private List<EditMessageText> buildResponseMessage(final Message message) {
+    private void updateCalendarEventWithBookingInfo(final Booking booking) {
+        final String clientEmail = booking.getClient().getEmail();
+        final String masterEmail = booking.getMaster().getEmail();
+        final Event bookingEvent = getBookingEvent(booking);
+
+        calendarService.addGuestsToEvent(masterEmail, bookingEvent, singletonList(clientEmail));
+    }
+
+    private Event getBookingEvent(final Booking booking) {
+        final String mastersEmail = booking.getMaster().getEmail();
+        final LocalDateTime localDateTime = booking.getDateTime();
+        final DateTime dateTime = getDateTimeFromLocalDateTime(localDateTime);
+
+        return calendarService.getByStartDateTime(mastersEmail, dateTime);
+    }
+
+    private List<EditMessageText> buildResponseToMessage(final Message message) {
         final Long chatId = message.getChatId();
         final Integer messageId = message.getMessageId();
         final EditMessageText editMessage = buildEditedMessageText(chatId, messageId, "You successfully booked service!", null);
         return singletonList(editMessage);
     }
 
-    private Booking saveBooking(final CallbackQuery callbackQuery) {
-        final Booking booking = buildBooking(callbackQuery);
-        return bookingService.save(booking);
-    }
-
-    private Booking buildBooking(final CallbackQuery callbackQuery) {
-        final String callbackText = callbackQuery.getData();
-        final String userName = callbackQuery.getFrom().getUserName();
-        final String mastersEmail = getEmailFromCommand(callbackText);
-        final Master master = masterService.getByEmail(mastersEmail);
-        final Client client = clientService.getByUsername(userName);
-        final LocalDateTime localDateTime = buildLocalDateTime(callbackText);
+    private Booking buildBookingByCallbackData(final CallbackQuery callbackQuery) {
+        final Client client = getClient(callbackQuery);
+        final Master master = getMaster(callbackQuery);
+        final LocalDateTime localDateTime = buildLocalDateTime(callbackQuery);
 
         final Booking booking = new Booking();
         booking.setClient(client);
@@ -96,7 +95,20 @@ public class BookTimeBotCommand extends BotCommand<CallbackQuery> {
         return booking;
     }
 
-    private LocalDateTime buildLocalDateTime(final String callbackText) {
+    private Master getMaster(final CallbackQuery callbackQuery) {
+        final String callbackText = callbackQuery.getData();
+        final String mastersEmail = getEmailFromCommand(callbackText);
+        return masterService.getByEmail(mastersEmail);
+    }
+
+    private Client getClient(final CallbackQuery callbackQuery) {
+        final String userName = callbackQuery.getFrom().getUserName();
+        return clientService.getByUsername(userName);
+    }
+
+    private LocalDateTime buildLocalDateTime(final CallbackQuery callbackQuery) {
+        final String callbackText = callbackQuery.getData();
+
         final int dayOfMonth = getDayOfMonthValueFromCommand(callbackText);
         final int month = getMonthValueFromCommand(callbackText);
         final int year = getYearValueFromCommand(callbackText);

@@ -41,32 +41,34 @@ public class ChooseTimeBotCommand extends BotCommand<CallbackQuery> {
     private final MasterService masterService;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
-        final Message message = callbackQuery.getMessage();
-        final Long chatId = message.getChatId();
-        final Integer messageId = message.getMessageId();
-        final String callbackText = callbackQuery.getData();
-        final String mastersEmail = getEmailFromCommand(callbackText);
-
-        final Master master = masterService.getByEmail(mastersEmail);
-
-        return buildMessage(chatId, messageId, master, callbackText);
-    }
-
-    @Override
     public BotCommandPattern getCommandPattern() {
         return CHOOSE_TIME;
     }
 
-    private List<EditMessageText> buildMessage(
-            final Long chatId, final Integer messageId, final Master master, final String callbackText) {
-        final String text = buildBookingInfoText(master, callbackText);
-        final String callbackData = buildCallbackData(callbackText, master.getEmail());
-        final InlineKeyboardButton approveButton = buildInlineKeyboardButton("Approve", callbackData);
+    @Override
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
+        final Message message = callbackQuery.getMessage();
+        return buildMessage(message, callbackQuery);
+    }
+
+    private List<EditMessageText> buildMessage(final Message message, final CallbackQuery callbackQuery) {
+        final Long chatId = message.getChatId();
+        final Integer messageId = message.getMessageId();
+        final String callbackData = callbackQuery.getData();
+        final String mastersEmail = getEmailFromCommand(callbackData);
+        final Master master = masterService.getByEmail(mastersEmail);
+
+        final String text = buildBookingInfoText(master, callbackData);
+        final InlineKeyboardMarkup keyboardMarkup = buildKeyboardMarkup(callbackData, mastersEmail);
+        final EditMessageText responseMessage = buildEditedMessageText(chatId, messageId, text, keyboardMarkup);
+        return singletonList(responseMessage);
+    }
+
+    private InlineKeyboardMarkup buildKeyboardMarkup(final String callbackData, final String mastersEmail) {
+        final String callbackDataForApproveButton = buildCallbackData(callbackData, mastersEmail);
+        final InlineKeyboardButton approveButton = buildInlineKeyboardButton("Approve", callbackDataForApproveButton);
         final InlineKeyboardButton declineButton = buildInlineKeyboardButton("Decline", MENU.getPatternTemplate());
-        final InlineKeyboardMarkup keyboardMarkup = buildInlineKeyboardMarkupWithSequentialButtons(approveButton, declineButton);
-        final EditMessageText message = buildEditedMessageText(chatId, messageId, text, keyboardMarkup);
-        return singletonList(message);
+        return buildInlineKeyboardMarkupWithSequentialButtons(approveButton, declineButton);
     }
 
     private String buildCallbackData(final String callbackText, final String mastersEmail) {
@@ -86,14 +88,12 @@ public class ChooseTimeBotCommand extends BotCommand<CallbackQuery> {
         final int year = getYearValueFromCommand(callbackText);
         final int hours = getHoursValueFromCommand(callbackText);
         final int minutes = getMinutesValueFromCommand(callbackText);
-        return format(
-                """
-                        <b>Booking confirmation</b>
-                        Master's first name: %s
-                        Master's last name: %s
-                        Date: %s-%s-%s
-                        Time: %s:%s""",
-                firstName, lastName, dayOfMonth, month, year, hours, minutes
+        return format("""
+                <b>Booking confirmation</b>
+                Master: %s %s
+                Date: %s.%s.%s
+                Time: %s:%s
+                """, firstName, lastName, dayOfMonth, month, year, hours, minutes
         );
     }
 }

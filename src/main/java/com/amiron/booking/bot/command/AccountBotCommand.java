@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 import static com.amiron.booking.bot.command.BotCommandPattern.ACCOUNT;
 import static com.amiron.booking.bot.command.BotCommandPattern.CHANGE_EMAIL;
@@ -23,6 +24,8 @@ import static com.amiron.booking.bot.util.KeyboardBuilder.buildInlineKeyboardMar
 import static com.amiron.booking.bot.util.MessageBuilder.buildEditedMessageText;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
+import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * @author Aliaksandr Miron
@@ -35,25 +38,30 @@ public class AccountBotCommand extends BotCommand<CallbackQuery> {
     private final ClientService clientService;
 
     @Override
-    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
-        final Message message = callbackQuery.getMessage();
-        final Integer messageId = message.getMessageId();
-        final Long chatId = message.getChatId();
-        final String userName = callbackQuery.getFrom().getUserName();
-        final Client client = clientService.getByUsername(userName);
-        return buildResponseMessage(chatId, messageId, client);
-    }
-
-    @Override
     public BotCommandPattern getCommandPattern() {
         return ACCOUNT;
     }
 
-    private List<EditMessageText> buildResponseMessage(final Long chatId, final Integer messageId, final Client client) {
-        final String accountText = buildAccountText(client);
+    @Override
+    public List<? extends PartialBotApiMethod<?>> execute(@NotNull final CallbackQuery callbackQuery) {
+        final Message message = callbackQuery.getMessage();
+        final Client client = getClientByCallbackData(callbackQuery);
+        final String accountText = buildAccountInfoText(client);
+        return buildResponseToMessage(message, accountText);
+    }
+
+    private Client getClientByCallbackData(final CallbackQuery callbackQuery) {
+        final String userName = callbackQuery.getFrom().getUserName();
+        return clientService.getByUsername(userName);
+    }
+
+    private List<EditMessageText> buildResponseToMessage(final Message message, final String accountText) {
+        final Long chatId = message.getChatId();
+        final Integer messageId = message.getMessageId();
+
         final InlineKeyboardMarkup keyboardMarkup = buildKeyboardMarkup();
-        final EditMessageText message = buildEditedMessageText(chatId, messageId, accountText, keyboardMarkup);
-        return singletonList(message);
+        final EditMessageText response = buildEditedMessageText(chatId, messageId, accountText, keyboardMarkup);
+        return singletonList(response);
     }
 
     private InlineKeyboardMarkup buildKeyboardMarkup() {
@@ -62,18 +70,33 @@ public class AccountBotCommand extends BotCommand<CallbackQuery> {
         return buildInlineKeyboardMarkupWithButtonsFromNewLine(accountButton, bookingsButton);
     }
 
-    // TODO replace with message builder
-    private String buildAccountText(final Client client) {
+    private String buildAccountInfoText(final Client client) {
+        final String name = buildNameValue(client);
+        final String email = buildEmailValue(client);
+        final String phoneNumber = buildPhoneNumberValue(client);
         return format("""
                         <b>Account</b>
-                        First Name: %s
-                        Last Name: %s
+                                                
+                        Name: %s
                         Email: %s
-                        Phone Number: +%s""",
-                client.getFirstName(),
-                client.getLastName(),
-                client.getEmail(),
-                client.getPhoneNumber()
+                        Phone Number: %s
+                        """,
+                name, email, phoneNumber
         );
+    }
+
+    private String buildNameValue(final Client client) {
+        final String firstName = client.getFirstName();
+        final String lastName = Optional.ofNullable(client.getLastName()).orElse(EMPTY);
+        return format("%s %s", firstName, lastName);
+    }
+
+    private String buildEmailValue(final Client client) {
+        return Optional.ofNullable(client.getEmail()).orElse("Not set");
+    }
+
+    private String buildPhoneNumberValue(final Client client) {
+        final String phoneNumber = client.getPhoneNumber();
+        return nonNull(phoneNumber) ? "+" + phoneNumber : "Not set";
     }
 }

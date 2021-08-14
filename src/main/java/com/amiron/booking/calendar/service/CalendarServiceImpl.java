@@ -73,7 +73,7 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public List<Event> getFreeUserDayEvents(@NotNull final String calendarId, @NotNull final DateTime dateTime) {
+    public List<Event> getUsersFreeDayEvents(@NotNull final String calendarId, @NotNull final DateTime dateTime) {
         final DateTime nextDay = addDaysToDateTime(dateTime, 1);
         final List<Event> freeUserDayEvents = getFreeUserEvents(calendarId, dateTime, nextDay);
         return filterOutNextDayEvents(freeUserDayEvents, dateTime);
@@ -103,7 +103,8 @@ public class CalendarServiceImpl implements CalendarService {
 
     private Event updateEventWithGuests(final Event event, final List<String> guestEmails) {
         final List<EventAttendee> eventAttendees = mapEmailsToEventAttendee(guestEmails);
-        event.setAttendees(eventAttendees);
+        final List<EventAttendee> existingAttendees = event.getAttendees();
+        existingAttendees.addAll(eventAttendees);
         return event;
     }
 
